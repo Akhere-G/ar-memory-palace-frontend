@@ -2,8 +2,8 @@ import React, { FC } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import ViewGroup from "./ViewGroup";
-import ViewNote from "./ViewNote";
+import ViewGroups from "./ViewGroups";
+import ViewNotes from "./ViewNotes";
 
 const Tab = createBottomTabNavigator();
 
@@ -12,14 +12,14 @@ const Navigator: FC = () => {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
-          name="ViewGroup"
-          component={ViewGroup}
-          options={{ title: "View Group" }}
+          name="ViewGroups"
+          component={ViewGroups}
+          options={{ title: "View Groups" }}
         />
         <Tab.Screen
-          name="ViewNote"
-          component={ViewNote}
-          options={{ title: "View Note" }}
+          name="ViewNotes"
+          component={ViewNotes}
+          options={{ title: "View Notes" }}
         />
       </Tab.Navigator>
     </NavigationContainer>

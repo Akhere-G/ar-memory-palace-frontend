@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const ViewGroup = () => {
+const ViewNotes = () => {
   return (
     <View>
-      <Text>View Group</Text>
+      <Text>View Notes</Text>
     </View>
   );
 };
 
-export default ViewGroup;
+export default ViewNotes;

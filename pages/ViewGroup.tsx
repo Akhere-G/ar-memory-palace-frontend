@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const CreateGroup = () => {
+const ViewGroup = () => {
   return (
     <View>
-      <Text>Create Group</Text>
+      <Text>View Group</Text>
     </View>
   );
 };
 
-export default CreateGroup;
+export default ViewGroup;

@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const CreateNote = () => {
+const ViewNote = () => {
   return (
     <View>
-      <Text>Create Note</Text>
+      <Text>View Note</Text>
     </View>
   );
 };
 
-export default CreateNote;
+export default ViewNote;

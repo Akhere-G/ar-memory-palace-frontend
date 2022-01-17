@@ -14,7 +14,23 @@ const Item: FC<Group> = ({ name, category, summary }) => {
 };
 
 const ViewGroups = () => {
-  const { groups } = useViewGroups();
+  const { groups, loading, error } = useViewGroups();
+
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View>
+        <Text>Error... {error}</Text>
+      </View>
+    );
+  }
 
   return (
     <View>

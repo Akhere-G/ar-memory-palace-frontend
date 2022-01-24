@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import { Text, View, FlatList } from "react-native";
-import { useViewGroups } from "../hooks";
+import { Text, View, FlatList, Button } from "react-native";
+import { useFetchGroups } from "../hooks";
 import { Group } from "../types";
 
 const Item: FC<Group> = ({ name, category, summary }) => {
@@ -13,8 +13,9 @@ const Item: FC<Group> = ({ name, category, summary }) => {
   );
 };
 
-const ViewGroups = () => {
-  const { groups, loading, error } = useViewGroups();
+const ViewGroups = (props: any) => {
+  const { groups, loading, error } = useFetchGroups();
+  const { navigation } = props;
 
   if (loading) {
     return (
@@ -28,6 +29,18 @@ const ViewGroups = () => {
     return (
       <View>
         <Text>Error... {error}</Text>
+      </View>
+    );
+  }
+
+  if (groups.length === 0) {
+    return (
+      <View>
+        <Text>No groups</Text>
+        <Button
+          title="You have no groups... Add a group?"
+          onPress={() => navigation.navigate("AddGroup")}
+        />
       </View>
     );
   }

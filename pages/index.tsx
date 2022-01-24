@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import ViewGroups from "./ViewGroups";
+import GroupStack from "./GroupStack";
 import ViewNotes from "./ViewNotes";
 
 const Tab = createBottomTabNavigator();
@@ -12,9 +12,9 @@ const Navigator: FC = () => {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
-          name="ViewGroups"
-          component={ViewGroups}
-          options={{ title: "View Groups" }}
+          name="Groups"
+          component={GroupStack}
+          options={{ title: "Groups" }}
         />
         <Tab.Screen
           name="ViewNotes"

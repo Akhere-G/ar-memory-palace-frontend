@@ -3,11 +3,15 @@ import { Group } from "./types";
 
 const baseUrl = __DEV__ ? "http://localhost:5000" : "/";
 
-interface GetGroupsResponse {
-  groups: Group[];
-  total: number;
-}
+type ISignIntoGroup = (name: string, password: string) => string;
 
-export const getGroups = async () => {
-  return await axios.get<GetGroupsResponse>(`${baseUrl}/api/groups`);
+export const signIntoGroup = async (name: string, password: string) => {
+  return await axios({
+    method: "post",
+    url: `${baseUrl}/api/groups/signin`,
+    data: {
+      name,
+      password,
+    },
+  });
 };

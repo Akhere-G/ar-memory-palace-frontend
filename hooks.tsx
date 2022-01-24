@@ -1,8 +1,41 @@
 import { useState, useEffect } from "react";
+import * as SecureStore from "expo-secure-store";
+import jwt_decode from "jwt-decode";
 import * as api from "./api";
 import { Group } from "./types";
 
-export const useViewGroups = (getGroups = api.getGroups) => {
+interface TokenList {
+  [key: string]: string;
+}
+
+const storageKey = "memory_palace";
+
+type GetGroupTokens = () => Promise<TokenList>;
+
+export const getGroupTokens: GetGroupTokens = async () => {
+  try {
+    const exisitingTokenList = await SecureStore.getItemAsync(storageKey);
+    if (exisitingTokenList) {
+      const tokens = (await JSON.parse(exisitingTokenList)) as TokenList;
+      return tokens;
+    }
+    return {};
+  } catch (error) {
+    return {};
+  }
+};
+
+export const storeGroupToken = async (id: string, token: string) => {
+  try {
+    let tokens: TokenList = await getGroupTokens();
+    tokens[id] = token;
+    await SecureStore.setItemAsync(storageKey, token);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const useFetchGroups = () => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -12,20 +45,46 @@ export const useViewGroups = (getGroups = api.getGroups) => {
     const fetchGroups = async () => {
       try {
         setLoading(true);
-        const response = await getGroups();
+        const groupTokens = await getGroupTokens();
+        const newGroups: Group[] = Object.values(groupTokens).map((token) =>
+          jwt_decode(token)
+        );
+        setGroups(newGroups);
+        setTotal(newGroups.length);
+        setLoading(false);
+        setError("");
+      } catch (err: any) {
+        setLoading(false);
+        setError(err.message);
+      }
+    };
+    fetchGroups();
+  }, []);
+
+  return { groups, total, loading, error };
+};
+
+export const useSignIntoGroup = (
+  name: string,
+  password: string,
+  signIntoGroup = api.signIntoGroup
+) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const login = async () => {
+      try {
+        setLoading(true);
+        const response = await signIntoGroup(name, password);
         const data = response.data;
 
-        const newGroups: Group[] = data.groups.map((group: any) => ({
-          id: group._id,
-          name: group.name,
-          category: group.category,
-          summary: group.summary,
-          latitude: group.latitude,
-          longitude: group.longitude,
-        }));
+        const { token } = data;
 
-        setGroups(newGroups);
-        setTotal(data.total);
+        const { id } = jwt_decode(token) as any;
+
+        storeGroupToken(id, token);
+
         setError("");
       } catch (err: any) {
         console.log(err?.response);
@@ -34,8 +93,8 @@ export const useViewGroups = (getGroups = api.getGroups) => {
         setLoading(false);
       }
     };
-    fetchGroups();
+    login();
   }, []);
 
-  return { groups, total, loading, error };
+  return { loading, error };
 };

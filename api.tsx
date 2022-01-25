@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Group } from "./types";
+import { Group, CreateGroupData } from "./types";
 
 const baseUrl = __DEV__ ? "http://localhost:5000" : "/";
 
@@ -13,5 +13,13 @@ export const signIntoGroup = async (name: string, password: string) => {
       name,
       password,
     },
+  });
+};
+
+export const createGroup = async (data: CreateGroupData) => {
+  return await axios({
+    method: "post",
+    url: `${baseUrl}/api/groups/create`,
+    data,
   });
 };

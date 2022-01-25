@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { Subheader } from "../components/";
 import ViewGroups from "./ViewGroups";
-import AddGroup from "./AddGroup";
+import CreateGroup from "./CreateGroup";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,9 +20,9 @@ const Navigator: FC = () => {
         options={{ title: "View Groups" }}
       />
       <Stack.Screen
-        name="AddGroup"
-        component={AddGroup}
-        options={{ title: "Add Group" }}
+        name="CreateGroup"
+        component={CreateGroup}
+        options={{ title: "Create Group" }}
       />
     </Stack.Navigator>
   );

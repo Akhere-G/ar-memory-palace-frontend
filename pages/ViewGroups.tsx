@@ -38,8 +38,8 @@ const ViewGroups = (props: any) => {
       <View>
         <Text>No groups</Text>
         <Button
-          title="You have no groups... Add a group?"
-          onPress={() => navigation.navigate("AddGroup")}
+          title="You have no groups... Create a new group?"
+          onPress={() => navigation.navigate("CreateGroup")}
         />
       </View>
     );

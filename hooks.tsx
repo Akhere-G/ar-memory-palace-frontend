@@ -3,6 +3,8 @@ import * as SecureStore from "expo-secure-store";
 import jwt_decode from "jwt-decode";
 import * as api from "./api";
 import { Group } from "./types";
+import { CreateGroupData } from "./types";
+import { validateCreateGroupData, handleError } from "./utils";
 
 interface TokenList {
   [key: string]: string;
@@ -20,18 +22,19 @@ export const getGroupTokens: GetGroupTokens = async () => {
       return tokens;
     }
     return {};
-  } catch (error) {
+  } catch (err) {
     return {};
   }
 };
 
-export const storeGroupToken = async (id: string, token: string) => {
+export const storeGroupToken = async (token: string) => {
   try {
+    const { id } = jwt_decode(token) as any;
     let tokens: TokenList = await getGroupTokens();
     tokens[id] = token;
     await SecureStore.setItemAsync(storageKey, token);
-  } catch (error) {
-    console.log(error);
+  } catch (err: any) {
+    console.log(err);
   }
 };
 
@@ -55,7 +58,7 @@ export const useFetchGroups = () => {
         setError("");
       } catch (err: any) {
         setLoading(false);
-        setError(err.message);
+        setError(err);
       }
     };
     fetchGroups();
@@ -81,14 +84,11 @@ export const useSignIntoGroup = (
 
         const { token } = data;
 
-        const { id } = jwt_decode(token) as any;
-
-        storeGroupToken(id, token);
+        storeGroupToken(token);
 
         setError("");
       } catch (err: any) {
-        console.log(err?.response);
-        setError(err.message);
+        setError(handleError(err));
       } finally {
         setLoading(false);
       }
@@ -97,4 +97,43 @@ export const useSignIntoGroup = (
   }, []);
 
   return { loading, error };
+};
+
+export const useCreateGroup = (registerGroup = api.createGroup) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const createGroup = async (formData: CreateGroupData) => {
+    try {
+      setSuccess(false);
+      setLoading(true);
+      setError("");
+      const possibleError = validateCreateGroupData(formData);
+
+      if (possibleError) {
+        setError(possibleError);
+        setLoading(false);
+
+        return;
+      }
+      const response = await registerGroup(formData);
+
+      const data = response.data;
+
+      const { token } = data;
+
+      setSuccess(true);
+
+      setTimeout(() => setSuccess(false), 10000);
+      storeGroupToken(token);
+      setError("");
+    } catch (err: any) {
+      setError(handleError(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, error, success, createGroup };
 };

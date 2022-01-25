@@ -1,18 +1,26 @@
 export type Note = {
-  id: String;
-  title: String;
-  groupId: String;
-  category: String;
-  text: String;
+  id: string;
+  title: string;
+  groupId: string;
+  text: string;
   latitude: Number;
   longitude: Number;
 };
 
 export type Group = {
   id: string;
-  name: String;
+  name: string;
   category: string;
-  summary: String;
+  summary: string;
   latitude: Number;
   longitude: Number;
+};
+
+export type CreateGroupData = {
+  name: string;
+  summary: string;
+  latitude: string;
+  longitude: string;
+  password: string;
+  confirmPassword: string;
 };

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Text, View, FlatList, Button } from "react-native";
+import { Text, View, FlatList, Button, StyleSheet } from "react-native";
 import { useFetchGroups } from "../hooks";
 import { Group } from "../types";
 
@@ -37,10 +37,18 @@ const ViewGroups = (props: any) => {
     return (
       <View>
         <Text>No groups</Text>
-        <Button
-          title="You have no groups... Create a new group?"
-          onPress={() => navigation.navigate("CreateGroup")}
-        />
+        <View style={styles.Button}>
+          <Button
+            title="You have no groups... Create a new group?"
+            onPress={() => navigation.navigate("CreateGroup")}
+          />
+        </View>
+        <View style={styles.Button}>
+          <Button
+            title="You have no groups... sign into a new group?"
+            onPress={() => navigation.navigate("SignIntoGroup")}
+          />
+        </View>
       </View>
     );
   }
@@ -56,5 +64,13 @@ const ViewGroups = (props: any) => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  Button: {
+    paddingTop: 10,
+    marginLeft: "auto",
+    marginRight: "auto",
+    maxWidth: "60%",
+  },
+});
 
 export default ViewGroups;

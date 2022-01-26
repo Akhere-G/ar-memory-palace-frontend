@@ -24,3 +24,8 @@ export type CreateGroupData = {
   password: string;
   confirmPassword: string;
 };
+
+export type SignIntoGroupData = {
+  name: string;
+  password: string;
+};

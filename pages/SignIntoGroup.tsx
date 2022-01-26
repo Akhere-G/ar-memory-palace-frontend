@@ -9,23 +9,19 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { useCreateGroup } from "../hooks";
-import { CreateGroupData } from "../types";
+import { useSignIntoGroup } from "../hooks";
+import { SignIntoGroupData } from "../types";
 
-const initialValues: CreateGroupData = {
+const initialValues: SignIntoGroupData = {
   name: "",
-  summary: "",
-  longitude: "",
-  latitude: "",
   password: "",
-  confirmPassword: "",
 };
 
 const ViewGroups = () => {
-  const [formData, setFormData] = useState<CreateGroupData>(initialValues);
-  const { loading, error, createGroup, success } = useCreateGroup();
+  const [formData, setFormData] = useState<SignIntoGroupData>(initialValues);
+  const { loading, error, signIntoGroup, success } = useSignIntoGroup();
   const handleSubmit = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
-    createGroup(formData);
+    signIntoGroup(formData);
   };
 
   useEffect(() => {
@@ -34,38 +30,24 @@ const ViewGroups = () => {
     }
   }, [success]);
 
-  const updateFormData = (newState: Partial<CreateGroupData>) => {
+  const updateFormData = (newState: Partial<SignIntoGroupData>) => {
     setFormData((prev) => ({ ...prev, ...newState }));
   };
 
   return (
     <ScrollView style={styles.Form}>
-      <Text style={styles.Title}>Create new group</Text>
+      <Text style={styles.Title}>SignInto new group</Text>
       {error ? <Text style={styles.Error}>{error}</Text> : <></>}
-      {success ? <Text style={styles.Success}>new group created!</Text> : <></>}
+      {success ? (
+        <Text style={styles.Success}>new group sign into!</Text>
+      ) : (
+        <></>
+      )}
       <View>
         <Text>Name</Text>
         <TextInput
           onChangeText={(e) => updateFormData({ name: e })}
           value={formData.name}
-          style={styles.Input}
-        />
-        <Text>Summary</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ summary: e })}
-          value={formData.summary}
-          style={styles.Input}
-        />
-        <Text>Latitude</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ latitude: e })}
-          value={formData.latitude}
-          style={styles.Input}
-        />
-        <Text>Longitude</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ longitude: e })}
-          value={formData.longitude}
           style={styles.Input}
         />
         <Text>Password</Text>
@@ -75,17 +57,11 @@ const ViewGroups = () => {
           secureTextEntry={true}
           style={styles.Input}
         />
-        <Text>Confirm Password</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ confirmPassword: e })}
-          value={formData.confirmPassword}
-          secureTextEntry={true}
-          style={styles.Input}
-        />
         <View style={styles.Button}>
+          <Text>{JSON.stringify({ loading, error })}</Text>
           <Button
             onPress={handleSubmit}
-            title={loading ? "Loading..." : "Create Group"}
+            title={loading ? "Loading..." : "Sign into Group"}
             disabled={loading}
           />
         </View>

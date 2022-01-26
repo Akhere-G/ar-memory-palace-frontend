@@ -3,8 +3,12 @@ import * as SecureStore from "expo-secure-store";
 import jwt_decode from "jwt-decode";
 import * as api from "./api";
 import { Group } from "./types";
-import { CreateGroupData } from "./types";
-import { validateCreateGroupData, handleError } from "./utils";
+import { CreateGroupData, SignIntoGroupData } from "./types";
+import {
+  validateCreateGroupData,
+  validateSignIntoGroupData,
+  handleError,
+} from "./utils";
 
 interface TokenList {
   [key: string]: string;
@@ -67,36 +71,42 @@ export const useFetchGroups = () => {
   return { groups, total, loading, error };
 };
 
-export const useSignIntoGroup = (
-  name: string,
-  password: string,
-  signIntoGroup = api.signIntoGroup
-) => {
-  const [loading, setLoading] = useState(true);
+export const useSignIntoGroup = (signIntoGroupAPI = api.signIntoGroup) => {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const login = async () => {
-      try {
-        setLoading(true);
-        const response = await signIntoGroup(name, password);
-        const data = response.data;
+  const signIntoGroup = async (formData: SignIntoGroupData) => {
+    try {
+      setLoading(true);
+      setSuccess(false);
+      setError("");
 
-        const { token } = data;
+      const possibleError = validateSignIntoGroupData(formData);
 
-        storeGroupToken(token);
-
-        setError("");
-      } catch (err: any) {
-        setError(handleError(err));
-      } finally {
+      if (possibleError) {
+        setError(possibleError);
         setLoading(false);
-      }
-    };
-    login();
-  }, []);
 
-  return { loading, error };
+        return;
+      }
+
+      const response = await signIntoGroupAPI(formData);
+      const data = response.data;
+
+      const { token } = data;
+
+      storeGroupToken(token);
+      setSuccess(true);
+      setError("");
+    } catch (err: any) {
+      setError(handleError(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, error, success, signIntoGroup };
 };
 
 export const useCreateGroup = (registerGroup = api.createGroup) => {

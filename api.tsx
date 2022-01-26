@@ -1,18 +1,15 @@
 import axios from "axios";
-import { Group, CreateGroupData } from "./types";
+import { CreateGroupData, SignIntoGroupData } from "./types";
 
 const baseUrl = __DEV__ ? "http://localhost:5000" : "/";
 
 type ISignIntoGroup = (name: string, password: string) => string;
 
-export const signIntoGroup = async (name: string, password: string) => {
+export const signIntoGroup = async (data: SignIntoGroupData) => {
   return await axios({
     method: "post",
     url: `${baseUrl}/api/groups/signin`,
-    data: {
-      name,
-      password,
-    },
+    data,
   });
 };
 

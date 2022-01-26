@@ -73,13 +73,13 @@ const ViewGroups = (props: any) => {
       />
       <View style={styles.Button}>
         <Button
-          title="You have no groups... Create a new group?"
+          title="Create a new group?"
           onPress={() => navigation.navigate("CreateGroup")}
         />
       </View>
       <View style={styles.Button}>
         <Button
-          title="You have no groups... sign into a new group?"
+          title="sign into a new group?"
           onPress={() => navigation.navigate("SignIntoGroup")}
         />
       </View>

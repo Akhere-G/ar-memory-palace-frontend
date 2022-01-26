@@ -36,7 +36,7 @@ const ViewGroups = () => {
 
   return (
     <ScrollView style={styles.Form}>
-      <Text style={styles.Title}>SignInto new group</Text>
+      <Text style={styles.Title}>Sign Into new group</Text>
       {error ? <Text style={styles.Error}>{error}</Text> : <></>}
       {success ? (
         <Text style={styles.Success}>new group sign into!</Text>
@@ -44,21 +44,24 @@ const ViewGroups = () => {
         <></>
       )}
       <View>
-        <Text>Name</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ name: e })}
-          value={formData.name}
-          style={styles.Input}
-        />
-        <Text>Password</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ password: e })}
-          value={formData.password}
-          secureTextEntry={true}
-          style={styles.Input}
-        />
+        <View style={styles.FormGroup}>
+          <Text>Name</Text>
+          <TextInput
+            onChangeText={(e) => updateFormData({ name: e })}
+            value={formData.name}
+            style={styles.Input}
+          />
+        </View>
+        <View style={styles.FormGroup}>
+          <Text>Password</Text>
+          <TextInput
+            onChangeText={(e) => updateFormData({ password: e })}
+            value={formData.password}
+            secureTextEntry={true}
+            style={styles.Input}
+          />
+        </View>
         <View style={styles.Button}>
-          <Text>{JSON.stringify({ loading, error })}</Text>
           <Button
             onPress={handleSubmit}
             title={loading ? "Loading..." : "Sign into Group"}
@@ -73,7 +76,7 @@ const ViewGroups = () => {
 const styles = StyleSheet.create({
   Title: {
     fontSize: 17,
-    paddingBottom: 5,
+    paddingBottom: 10,
   },
   Error: {
     backgroundColor: "#fdd",
@@ -88,8 +91,12 @@ const styles = StyleSheet.create({
   Form: {
     padding: 10,
   },
+  FormGroup: {
+    paddingBottom: 10,
+  },
   Input: {
-    borderColor: "#333",
+    borderColor: "#aaa",
+    backgroundColor: "#fff",
     borderWidth: 1,
     borderRadius: 5,
     borderStyle: "solid",

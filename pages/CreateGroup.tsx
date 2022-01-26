@@ -44,44 +44,56 @@ const ViewGroups = () => {
       {error ? <Text style={styles.Error}>{error}</Text> : <></>}
       {success ? <Text style={styles.Success}>new group created!</Text> : <></>}
       <View>
-        <Text>Name</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ name: e })}
-          value={formData.name}
-          style={styles.Input}
-        />
-        <Text>Summary</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ summary: e })}
-          value={formData.summary}
-          style={styles.Input}
-        />
-        <Text>Latitude</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ latitude: e })}
-          value={formData.latitude}
-          style={styles.Input}
-        />
-        <Text>Longitude</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ longitude: e })}
-          value={formData.longitude}
-          style={styles.Input}
-        />
-        <Text>Password</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ password: e })}
-          value={formData.password}
-          secureTextEntry={true}
-          style={styles.Input}
-        />
-        <Text>Confirm Password</Text>
-        <TextInput
-          onChangeText={(e) => updateFormData({ confirmPassword: e })}
-          value={formData.confirmPassword}
-          secureTextEntry={true}
-          style={styles.Input}
-        />
+        <View style={styles.FormGroup}>
+          <Text>Name</Text>
+          <TextInput
+            onChangeText={(e) => updateFormData({ name: e })}
+            value={formData.name}
+            style={styles.Input}
+          />
+        </View>
+        <View style={styles.FormGroup}>
+          <Text>Summary</Text>
+          <TextInput
+            onChangeText={(e) => updateFormData({ summary: e })}
+            value={formData.summary}
+            style={styles.Input}
+          />
+        </View>
+        <View style={styles.FormGroup}>
+          <Text>Latitude</Text>
+          <TextInput
+            onChangeText={(e) => updateFormData({ latitude: e })}
+            value={formData.latitude}
+            style={styles.Input}
+          />
+        </View>
+        <View style={styles.FormGroup}>
+          <Text>Longitude</Text>
+          <TextInput
+            onChangeText={(e) => updateFormData({ longitude: e })}
+            value={formData.longitude}
+            style={styles.Input}
+          />
+        </View>
+        <View style={styles.FormGroup}>
+          <Text>Password</Text>
+          <TextInput
+            onChangeText={(e) => updateFormData({ password: e })}
+            value={formData.password}
+            secureTextEntry={true}
+            style={styles.Input}
+          />
+        </View>
+        <View style={styles.FormGroup}>
+          <Text>Confirm Password</Text>
+          <TextInput
+            onChangeText={(e) => updateFormData({ confirmPassword: e })}
+            value={formData.confirmPassword}
+            secureTextEntry={true}
+            style={styles.Input}
+          />
+        </View>
         <View style={styles.Button}>
           <Button
             onPress={handleSubmit}
@@ -97,7 +109,7 @@ const ViewGroups = () => {
 const styles = StyleSheet.create({
   Title: {
     fontSize: 17,
-    paddingBottom: 5,
+    paddingBottom: 10,
   },
   Error: {
     backgroundColor: "#fdd",
@@ -112,8 +124,12 @@ const styles = StyleSheet.create({
   Form: {
     padding: 10,
   },
+  FormGroup: {
+    paddingBottom: 10,
+  },
   Input: {
-    borderColor: "#333",
+    borderColor: "#aaa",
+    backgroundColor: "#fff",
     borderWidth: 1,
     borderRadius: 5,
     borderStyle: "solid",

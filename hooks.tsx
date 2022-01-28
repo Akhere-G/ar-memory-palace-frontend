@@ -81,13 +81,14 @@ export const useGetGroups = () => {
 
 export const useSignIntoGroup = (signIntoGroupAPI = api.signIntoGroup) => {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const signIntoGroup = async (formData: SignIntoGroupData) => {
+  const signIntoGroup = async (
+    goBack: Function,
+    formData: SignIntoGroupData
+  ) => {
     try {
       setLoading(true);
-      setSuccess(false);
       setError("");
 
       const possibleError = validateSignIntoGroupData(formData);
@@ -105,26 +106,24 @@ export const useSignIntoGroup = (signIntoGroupAPI = api.signIntoGroup) => {
       const { token } = data;
 
       storeGroupToken(token);
-      setSuccess(true);
       setError("");
+      setLoading(false);
+      goBack();
     } catch (err: any) {
       setError(handleError(err));
-    } finally {
       setLoading(false);
     }
   };
 
-  return { loading, error, success, signIntoGroup };
+  return { loading, error, signIntoGroup };
 };
 
 export const useCreateGroup = (registerGroup = api.createGroup) => {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const createGroup = async (formData: CreateGroupData) => {
+  const createGroup = async (goBack: Function, formData: CreateGroupData) => {
     try {
-      setSuccess(false);
       setLoading(true);
       setError("");
       const possibleError = validateCreateGroupData(formData);
@@ -141,17 +140,15 @@ export const useCreateGroup = (registerGroup = api.createGroup) => {
 
       const { token } = data;
 
-      setSuccess(true);
-
-      setTimeout(() => setSuccess(false), 10000);
+      setLoading(false);
       storeGroupToken(token);
       setError("");
+      goBack();
     } catch (err: any) {
       setError(handleError(err));
-    } finally {
       setLoading(false);
     }
   };
 
-  return { loading, error, success, createGroup };
+  return { loading, error, createGroup };
 };

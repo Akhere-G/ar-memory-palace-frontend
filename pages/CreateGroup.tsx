@@ -21,18 +21,14 @@ const initialValues: CreateGroupData = {
   confirmPassword: "",
 };
 
-const ViewGroups = () => {
+const ViewGroups = (props: any) => {
   const [formData, setFormData] = useState<CreateGroupData>(initialValues);
-  const { loading, error, createGroup, success } = useCreateGroup();
-  const handleSubmit = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
-    createGroup(formData);
-  };
+  const { loading, error, createGroup } = useCreateGroup();
+  const goBack = props.navigation.goBack;
 
-  useEffect(() => {
-    if (success) {
-      setFormData({ ...initialValues });
-    }
-  }, [success]);
+  const handleSubmit = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
+    createGroup(goBack, formData);
+  };
 
   const updateFormData = (newState: Partial<CreateGroupData>) => {
     setFormData((prev) => ({ ...prev, ...newState }));
@@ -42,7 +38,6 @@ const ViewGroups = () => {
     <ScrollView style={styles.Form}>
       <Text style={styles.Title}>Create new group</Text>
       {error ? <Text style={styles.Error}>{error}</Text> : <></>}
-      {success ? <Text style={styles.Success}>new group created!</Text> : <></>}
       <View>
         <View style={styles.FormGroup}>
           <Text>Name</Text>

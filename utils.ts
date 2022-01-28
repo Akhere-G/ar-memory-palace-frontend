@@ -12,13 +12,10 @@ const validateString = (name: string, value: string, maxLength = 30) => {
 
 const validateNumber = (name: string, value: string) => {
   const numericalValue = Number(value);
-  console.log("here", { name, value });
   if (value.trim() === "") {
-    console.log("here 1");
     return `${name} is required`;
   }
   if (isNaN(numericalValue)) {
-    console.log("here 2");
     return `${name} must be a number`;
   }
 };
@@ -62,7 +59,6 @@ export const handleError = (
   }
   if (errorObj.isAxiosError) {
     const message = errorObj?.response?.data?.message || errorObj.message;
-    console.log("a", JSON.stringify(errorObj, null, 2));
     return message || defaultMessage;
   }
   return defaultMessage;

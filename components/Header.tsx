@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 
 const Header: any = (props: any) => {
-  // console.log(props);
   const { title } = props.options;
   return (
     <SafeAreaView>

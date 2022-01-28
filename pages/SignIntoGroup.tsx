@@ -17,18 +17,15 @@ const initialValues: SignIntoGroupData = {
   password: "",
 };
 
-const ViewGroups = () => {
+const ViewGroups = (props: any) => {
   const [formData, setFormData] = useState<SignIntoGroupData>(initialValues);
-  const { loading, error, signIntoGroup, success } = useSignIntoGroup();
+  const { loading, error, signIntoGroup } = useSignIntoGroup();
+
   const handleSubmit = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
-    signIntoGroup(formData);
+    signIntoGroup(goBack, formData);
   };
 
-  useEffect(() => {
-    if (success) {
-      setFormData({ ...initialValues });
-    }
-  }, [success]);
+  const goBack = props.navigation.goBack;
 
   const updateFormData = (newState: Partial<SignIntoGroupData>) => {
     setFormData((prev) => ({ ...prev, ...newState }));
@@ -38,11 +35,6 @@ const ViewGroups = () => {
     <ScrollView style={styles.Form}>
       <Text style={styles.Title}>Sign Into new group</Text>
       {error ? <Text style={styles.Error}>{error}</Text> : <></>}
-      {success ? (
-        <Text style={styles.Success}>new group sign into!</Text>
-      ) : (
-        <></>
-      )}
       <View>
         <View style={styles.FormGroup}>
           <Text>Name</Text>

@@ -57,8 +57,13 @@ export const handleError = (
   errorObj: any,
   defaultMessage = "An error occured"
 ) => {
+  if (typeof errorObj !== "object") {
+    return defaultMessage;
+  }
   if (errorObj.isAxiosError) {
-    return errorObj.response.data.message;
+    const message = errorObj?.response?.data?.message || errorObj.message;
+    console.log("a", JSON.stringify(errorObj, null, 2));
+    return message || defaultMessage;
   }
   return defaultMessage;
 };

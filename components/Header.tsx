@@ -15,7 +15,6 @@ const Header: any = (props: any) => {
 
 const styles = StyleSheet.create({
   Header: {
-    justifyContent: "center",
     padding: 10,
     paddingTop: 30,
     fontSize: 12,

@@ -11,7 +11,11 @@ const Tab = createBottomTabNavigator();
 const Navigator: FC = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={{
+          header: (props) => <Header {...props} />,
+        }}
+      >
         <Tab.Screen
           name="Groups"
           component={GroupStack}

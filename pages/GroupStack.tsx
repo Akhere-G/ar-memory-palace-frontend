@@ -10,7 +10,11 @@ const Stack = createNativeStackNavigator();
 
 const Navigator: FC = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        header: (props) => <Subheader {...props} />,
+      }}
+    >
       <Stack.Screen
         name="ViewGroups"
         component={ViewGroups}

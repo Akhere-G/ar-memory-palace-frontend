@@ -1,12 +1,5 @@
 import React, { FC, useEffect } from "react";
-import {
-  Text,
-  View,
-  ScrollView,
-  FlatList,
-  Button,
-  StyleSheet,
-} from "react-native";
+import { Text, View, FlatList, Button, StyleSheet } from "react-native";
 import { useGetGroups } from "../hooks";
 import { Group } from "../types";
 
@@ -65,7 +58,7 @@ const ViewGroups = (props: any) => {
   }
 
   return (
-    <ScrollView style={styles.Main}>
+    <View style={styles.Main}>
       <FlatList
         data={groups}
         renderItem={({ item }) => <Item {...item} />}
@@ -83,7 +76,7 @@ const ViewGroups = (props: any) => {
           onPress={() => navigation.navigate("SignIntoGroup")}
         />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 const styles = StyleSheet.create({

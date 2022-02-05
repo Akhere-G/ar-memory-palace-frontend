@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import {
   Text,
   View,
@@ -9,7 +9,7 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { useCreateGroup } from "../hooks";
+import { useCreateGroup, useGetLocation } from "../hooks";
 import { CreateGroupData } from "../types";
 
 const initialValues: CreateGroupData = {
@@ -26,6 +26,7 @@ const ViewGroups = (props: any) => {
   const { loading, error, createGroup } = useCreateGroup();
   const goBack = props.navigation.goBack;
 
+  const { getLocation, location, loading: locationLoading } = useGetLocation();
   const handleSubmit = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
     createGroup(goBack, formData);
   };
@@ -56,22 +57,6 @@ const ViewGroups = (props: any) => {
           />
         </View>
         <View style={styles.FormGroup}>
-          <Text>Latitude</Text>
-          <TextInput
-            onChangeText={(e) => updateFormData({ latitude: e })}
-            value={formData.latitude}
-            style={styles.Input}
-          />
-        </View>
-        <View style={styles.FormGroup}>
-          <Text>Longitude</Text>
-          <TextInput
-            onChangeText={(e) => updateFormData({ longitude: e })}
-            value={formData.longitude}
-            style={styles.Input}
-          />
-        </View>
-        <View style={styles.FormGroup}>
           <Text>Password</Text>
           <TextInput
             onChangeText={(e) => updateFormData({ password: e })}
@@ -88,6 +73,15 @@ const ViewGroups = (props: any) => {
             secureTextEntry={true}
             style={styles.Input}
           />
+        </View>
+        <View style={styles.FormGroup}>
+          <Button
+            title={location ? "location set" : "Use current location?"}
+            disabled={loading}
+            onPress={() => {
+              getLocation().then(() => updateFormData({ ...location }));
+            }}
+          ></Button>
         </View>
         <View style={styles.Button}>
           <Button

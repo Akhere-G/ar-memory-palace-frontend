@@ -3,12 +3,49 @@ import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import jwt_decode from "jwt-decode";
 import * as api from "./api";
-import { Group, CreateGroupData, SignIntoGroupData } from "./types";
+import {
+  Group,
+  CreateGroupData,
+  SignIntoGroupData,
+  Coordinates,
+} from "./types";
 import {
   validateCreateGroupData,
   validateSignIntoGroupData,
   handleError,
 } from "./utils";
+
+import * as Location from "expo-location";
+
+export const useGetLocation = () => {
+  const [location, setLocation] = useState<Coordinates | null>(null);
+  const [hasPermissions, setHasPermissions] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const getLocation = async () => {
+    setLoading(true);
+    if (!hasPermissions) {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status != "granted") {
+        setError("Permission to access location was denied");
+        setLoading(false);
+        return;
+      } else {
+        setHasPermissions(true);
+      }
+    }
+    const { coords } = await Location.getCurrentPositionAsync({});
+    setLocation({
+      latitude: String(coords.latitude),
+      longitude: String(coords.longitude),
+    });
+    setError("");
+    setLoading(false);
+  };
+
+  return { location, hasPermissions, error, loading, getLocation };
+};
 
 interface TokenList {
   [key: string]: string;

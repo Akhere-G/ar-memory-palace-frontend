@@ -29,3 +29,8 @@ export type SignIntoGroupData = {
   name: string;
   password: string;
 };
+
+export type Coordinates = {
+  latitude: string;
+  longitude: string;
+};

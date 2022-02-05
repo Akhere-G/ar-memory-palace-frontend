@@ -10,18 +10,8 @@ const validateString = (name: string, value: string, maxLength = 30) => {
   }
 };
 
-const validateNumber = (name: string, value: string) => {
-  const numericalValue = Number(value);
-  if (value.trim() === "") {
-    return `${name} is required`;
-  }
-  if (isNaN(numericalValue)) {
-    return `${name} must be a number`;
-  }
-};
-
 export const validateCreateGroupData = (formData: CreateGroupData) => {
-  const { name, summary, latitude, longitude, password, confirmPassword } =
+  const { name, summary, password, confirmPassword, latitude, longitude } =
     formData;
   const nameError = validateString("name", name);
   const summaryError = validateString("summary", summary, 200);
@@ -30,17 +20,11 @@ export const validateCreateGroupData = (formData: CreateGroupData) => {
     "confirm password",
     confirmPassword
   );
-  const latitudeError = validateNumber("latitude", latitude);
-  const longitudeError = validateNumber("longitude", longitude);
 
-  return (
-    nameError ||
-    summaryError ||
-    passwordError ||
-    confirmPasswordError ||
-    latitudeError ||
-    longitudeError
-  );
+  if (longitude === "" || latitude === "") {
+    return "Location is required";
+  }
+  return nameError || summaryError || passwordError || confirmPasswordError;
 };
 
 export const validateSignIntoGroupData = (formData: SignIntoGroupData) => {

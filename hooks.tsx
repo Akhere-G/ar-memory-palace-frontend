@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import jwt_decode from "jwt-decode";
@@ -8,6 +8,7 @@ import {
   CreateGroupData,
   SignIntoGroupData,
   Coordinates,
+  Note,
 } from "./types";
 import {
   validateCreateGroupData,
@@ -188,4 +189,13 @@ export const useCreateGroup = (registerGroup = api.createGroup) => {
   };
 
   return { loading, error, createGroup };
+};
+
+export const useGetNotes = () => {
+  const notes: Note[] = [];
+  const loading = false;
+  const error = "";
+  const getNotes = () => {};
+
+  return { notes, loading, error, getNotes };
 };

@@ -1,4 +1,4 @@
-import { CreateGroupData, SignIntoGroupData } from "./types";
+import { CreateGroupData, CreateNoteData, SignIntoGroupData } from "./types";
 
 const validateString = (name: string, value: string, maxLength = 30) => {
   if (!value.trim()) {
@@ -8,6 +8,7 @@ const validateString = (name: string, value: string, maxLength = 30) => {
   } else if (value.trim().length > maxLength) {
     return `${name} is too long`;
   }
+  return "";
 };
 
 export const validateCreateGroupData = (formData: CreateGroupData) => {
@@ -32,6 +33,21 @@ export const validateSignIntoGroupData = (formData: SignIntoGroupData) => {
   const nameError = validateString("name", name);
   const passwordError = validateString("password", password);
   return nameError || passwordError;
+};
+
+export const validateCreateNoteData = (formData: CreateNoteData) => {
+  const { groupToken, latitude, longitude, text, title } = formData;
+  const groupTokenError = validateString(
+    "the group of the note",
+    groupToken,
+    40000
+  );
+  const titleError = validateString("Title", title, 50);
+  const textError = validateString("Text", text, 600);
+  if (longitude === "" || latitude === "") {
+    return "Location is required";
+  }
+  return groupTokenError || titleError || textError;
 };
 
 export const handleError = (

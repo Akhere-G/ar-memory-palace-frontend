@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import jwt_decode from "jwt-decode";
@@ -9,11 +9,13 @@ import {
   SignIntoGroupData,
   Coordinates,
   Note,
+  CreateNoteData,
 } from "./types";
 import {
   validateCreateGroupData,
   validateSignIntoGroupData,
   handleError,
+  validateCreateNoteData,
 } from "./utils";
 
 import * as Location from "expo-location";
@@ -89,6 +91,9 @@ export const storeGroupToken = async (token: string) => {
   }
 };
 
+const getGroupsFromTokens = (groupTokens: TokenList) =>
+  Object.values(groupTokens).map((token) => jwt_decode(token)) as Group[];
+
 export const useGetGroups = () => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [total, setTotal] = useState(0);
@@ -101,9 +106,7 @@ export const useGetGroups = () => {
       setError("");
 
       const groupTokens = await getGroupTokens();
-      const newGroups: Group[] = Object.values(groupTokens).map((token) =>
-        jwt_decode(token)
-      );
+      const newGroups: Group[] = getGroupsFromTokens(groupTokens);
       setGroups(newGroups);
       setTotal(newGroups.length);
       setLoading(false);
@@ -191,11 +194,87 @@ export const useCreateGroup = (registerGroup = api.createGroup) => {
   return { loading, error, createGroup };
 };
 
-export const useGetNotes = () => {
-  const notes: Note[] = [];
-  const loading = false;
-  const error = "";
-  const getNotes = () => {};
+export const useCreateNote = (postNote = api.createNote) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [groupTokensByName, setGroupTokensByName] = useState<TokenList>({});
 
-  return { notes, loading, error, getNotes };
+  useEffect(() => {
+    const getGroups = async () => {
+      const groupTokens = await getGroupTokens();
+      const newGroupTokenList: TokenList = {};
+
+      Object.entries(groupTokens).forEach((entry) => {
+        const [_, token] = entry;
+        const groupData = jwt_decode(token) as Group;
+        const { name } = groupData;
+
+        newGroupTokenList[name] = token;
+      });
+      setGroupTokensByName(newGroupTokenList);
+    };
+    getGroups();
+  }, []);
+
+  const createNote = async (goBack: Function, formData: CreateNoteData) => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const possibleError = validateCreateNoteData(formData);
+
+      if (possibleError) {
+        setError(possibleError);
+        setLoading(false);
+        return;
+      }
+      const response = await postNote(formData);
+
+      const data = response.data;
+
+      const { note } = data;
+
+      setLoading(false);
+      setError("");
+      goBack();
+    } catch (err: any) {
+      setError(handleError(err));
+      setLoading(false);
+    }
+  };
+
+  return { loading, error, createNote, groupTokensByName };
+};
+
+export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [sucess, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const getNotes = async () => {
+    setLoading(true);
+    setSuccess(false);
+    const groupTokens = await getGroupTokens();
+
+    try {
+      const tokens = Object.values(groupTokens);
+      tokens.forEach(async (token, index) => {
+        const response = await fetchNotesForGroup(token);
+        const data = response.data;
+        const { notes } = data;
+        setNotes((prev) => [...prev, ...notes]);
+        if (index === tokens.length - 1) {
+          setSuccess(true);
+          setLoading(false);
+          setError("");
+        }
+      });
+    } catch (err) {
+      setError(handleError(err));
+      setLoading(false);
+    }
+  };
+
+  return { notes, loading, error, sucess, getNotes };
 };

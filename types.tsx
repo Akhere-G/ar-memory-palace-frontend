@@ -34,3 +34,11 @@ export type Coordinates = {
   latitude: string;
   longitude: string;
 };
+
+export type CreateNoteData = {
+  title: string;
+  groupToken: string;
+  text: string;
+  latitude: string;
+  longitude: string;
+};

@@ -19,6 +19,7 @@ const Navigator: FC = () => {
         component={ViewNotes}
         options={{ title: "View Notes" }}
       />
+
       <Stack.Screen
         name="CreateNote"
         component={CreateNote}

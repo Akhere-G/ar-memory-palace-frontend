@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -34,6 +34,12 @@ const ViewGroups = (props: any) => {
   const updateFormData = (newState: Partial<CreateGroupData>) => {
     setFormData((prev) => ({ ...prev, ...newState }));
   };
+
+  useEffect(() => {
+    if (location) {
+      updateFormData(location);
+    }
+  }, [location]);
 
   return (
     <ScrollView style={styles.Form}>
@@ -77,10 +83,8 @@ const ViewGroups = (props: any) => {
         <View style={styles.FormGroup}>
           <Button
             title={location ? "location set" : "Use current location?"}
-            disabled={loading}
-            onPress={() => {
-              getLocation().then(() => updateFormData({ ...location }));
-            }}
+            disabled={locationLoading}
+            onPress={getLocation}
           ></Button>
         </View>
         <View style={styles.Button}>

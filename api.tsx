@@ -1,9 +1,7 @@
 import axios from "axios";
-import { CreateGroupData, SignIntoGroupData } from "./types";
+import { CreateGroupData, SignIntoGroupData, CreateNoteData } from "./types";
 
 const baseUrl = __DEV__ ? "http://localhost:5000" : "/";
-
-type ISignIntoGroup = (name: string, password: string) => string;
 
 export const signIntoGroup = async (data: SignIntoGroupData) => {
   return await axios({
@@ -18,5 +16,31 @@ export const createGroup = async (data: CreateGroupData) => {
     method: "post",
     url: `${baseUrl}/api/groups/create`,
     data,
+  });
+};
+
+export const fetchNotesForGroup = async (token: string) => {
+  return await axios({
+    method: "get",
+    url: `${baseUrl}/api/notes`,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const createNote = async (data: CreateNoteData) => {
+  return await axios({
+    method: "post",
+    url: `${baseUrl}/api/notes`,
+    data: {
+      title: data.title,
+      text: data.text,
+      latitude: data.latitude,
+      longitude: data.longitude,
+    },
+    headers: {
+      authorization: `Bearer ${data.groupToken}`,
+    },
   });
 };

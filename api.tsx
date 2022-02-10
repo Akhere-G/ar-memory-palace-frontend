@@ -3,6 +3,16 @@ import { CreateGroupData, SignIntoGroupData, CreateNoteData } from "./types";
 
 const baseUrl = __DEV__ ? "http://localhost:5000" : "/";
 
+export const refreshToken = async (token: string) => {
+  return await axios({
+    method: "get",
+    url: `${baseUrl}/api/groups/refresh`,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const signIntoGroup = async (data: SignIntoGroupData) => {
   return await axios({
     method: "post",

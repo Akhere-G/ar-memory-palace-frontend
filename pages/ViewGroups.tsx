@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from "react";
 import { Text, View, FlatList, Button, StyleSheet } from "react-native";
-import { useGetGroups } from "../hooks";
+import { useFetchGroups } from "../hooks";
 import { Group } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -16,7 +16,7 @@ const Item: FC<Group> = ({ name, category, summary }) => {
 };
 
 const ViewGroups = (props: any) => {
-  const { loading, error, getGroups } = useGetGroups();
+  const { loading, error, fetchGroups } = useFetchGroups();
   const { navigation } = props;
 
   const dispatch = useDispatch();
@@ -24,8 +24,11 @@ const ViewGroups = (props: any) => {
 
   useEffect(() => {
     const getGroupsFromStorage = async () => {
-      const newGroups = await getGroups();
-      dispatch(setGroups(newGroups));
+      const response = await fetchGroups();
+      if (response) {
+        const { groups } = response;
+        dispatch(setGroups(groups));
+      }
     };
     getGroupsFromStorage();
   }, []);

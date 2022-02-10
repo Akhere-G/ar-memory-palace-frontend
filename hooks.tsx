@@ -91,35 +91,48 @@ export const storeGroupToken = async (token: string) => {
   }
 };
 
-const getGroupsFromTokens = (groupTokens: TokenList) =>
-  Object.values(groupTokens).map((token) => jwt_decode(token)) as Group[];
-
-export const useGetGroups = () => {
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+export const useFetchGroups = (
+  refreshToken = api.refreshToken,
+  getGroupTokensFromStorage = getGroupTokens
+) => {
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const getGroups = async () => {
+  const fetchGroups = async () => {
     try {
       setLoading(true);
-      setError("");
 
-      const groupTokens = await getGroupTokens();
-      const newGroups: Group[] = getGroupsFromTokens(groupTokens);
-      setTotal(newGroups.length);
-      setLoading(false);
+      const tokenList = await getGroupTokensFromStorage();
+      const tokenInArray = Object.entries(tokenList);
+
+      const groups: Group[] = await Promise.all(
+        tokenInArray.map(async (entry) => {
+          const [id, token] = entry;
+          const response = await refreshToken(token);
+          const data = response.data;
+          const newToken = data.token;
+
+          const group = data.group;
+
+          await storeGroupToken(token);
+
+          tokenList[id] = newToken;
+          return group;
+        })
+      );
+
       setError("");
-      return newGroups;
-    } catch (err: any) {
       setLoading(false);
-      setError(err);
-      return [];
+
+      return { groups, total: groups.length };
+    } catch (error) {
+      setError("could not get groups");
+      setLoading(false);
     }
   };
 
-  return { total, loading, error, getGroups };
+  return { loading, error, fetchGroups };
 };
-
 export const useSignIntoGroup = (signIntoGroupAPI = api.signIntoGroup) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

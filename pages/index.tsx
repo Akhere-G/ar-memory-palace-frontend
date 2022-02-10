@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Header } from "../components/";
 import GroupStack from "./GroupStack";
 import NoteStack from "./NoteStack";
-import ViewNotes from "./ViewNotes";
+import { IconButton } from "react-native-paper";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,14 +18,32 @@ const Navigator: FC = () => {
         }}
       >
         <Tab.Screen
-          name="Notes"
-          component={NoteStack}
-          options={{ title: "Notes" }}
-        />
-        <Tab.Screen
           name="Groups"
           component={GroupStack}
-          options={{ title: "Groups" }}
+          options={{
+            title: "Groups",
+            tabBarIcon: ({ focused, color, size }) => (
+              <IconButton
+                color={focused ? "#48f" : color}
+                icon="group"
+                size={size}
+              ></IconButton>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Notes"
+          component={NoteStack}
+          options={{
+            title: "Notes",
+            tabBarIcon: ({ focused, color, size }) => (
+              <IconButton
+                color={focused ? "#48f" : color}
+                icon="note"
+                size={size}
+              ></IconButton>
+            ),
+          }}
         />
       </Tab.Navigator>
     </NavigationContainer>

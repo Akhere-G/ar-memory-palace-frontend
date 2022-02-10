@@ -95,7 +95,6 @@ const getGroupsFromTokens = (groupTokens: TokenList) =>
   Object.values(groupTokens).map((token) => jwt_decode(token)) as Group[];
 
 export const useGetGroups = () => {
-  const [groups, setGroups] = useState<Group[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -107,17 +106,18 @@ export const useGetGroups = () => {
 
       const groupTokens = await getGroupTokens();
       const newGroups: Group[] = getGroupsFromTokens(groupTokens);
-      setGroups(newGroups);
       setTotal(newGroups.length);
       setLoading(false);
       setError("");
+      return newGroups;
     } catch (err: any) {
       setLoading(false);
       setError(err);
+      return [];
     }
   };
 
-  return { groups, total, loading, error, getGroups };
+  return { total, loading, error, getGroups };
 };
 
 export const useSignIntoGroup = (signIntoGroupAPI = api.signIntoGroup) => {
@@ -259,6 +259,10 @@ export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
 
     try {
       const tokens = Object.values(groupTokens);
+      if (tokens.length === 0) {
+        setLoading(false);
+        setError("");
+      }
       tokens.forEach(async (token, index) => {
         const response = await fetchNotesForGroup(token);
         const data = response.data;

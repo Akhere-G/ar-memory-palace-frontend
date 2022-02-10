@@ -124,10 +124,7 @@ export const useSignIntoGroup = (signIntoGroupAPI = api.signIntoGroup) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const signIntoGroup = async (
-    goBack: Function,
-    formData: SignIntoGroupData
-  ) => {
+  const signIntoGroup = async (formData: SignIntoGroupData) => {
     try {
       setLoading(true);
       setError("");
@@ -135,21 +132,18 @@ export const useSignIntoGroup = (signIntoGroupAPI = api.signIntoGroup) => {
       const possibleError = validateSignIntoGroupData(formData);
 
       if (possibleError) {
-        setError(possibleError);
-        setLoading(false);
-
-        return;
+        throw new Error(possibleError);
       }
 
       const response = await signIntoGroupAPI(formData);
       const data = response.data;
 
-      const { token } = data;
+      const { token, group } = data;
 
       storeGroupToken(token);
       setError("");
       setLoading(false);
-      goBack();
+      return { group };
     } catch (err: any) {
       setError(handleError(err));
       setLoading(false);

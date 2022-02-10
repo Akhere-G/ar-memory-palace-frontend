@@ -9,7 +9,9 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { useSignIntoGroup } from "../hooks";
+import { addGroup } from "../slices/GroupSlice";
 import { SignIntoGroupData } from "../types";
 
 const initialValues: SignIntoGroupData = {
@@ -19,10 +21,15 @@ const initialValues: SignIntoGroupData = {
 
 const ViewGroups = (props: any) => {
   const [formData, setFormData] = useState<SignIntoGroupData>(initialValues);
+  const dispatch = useDispatch();
   const { loading, error, signIntoGroup } = useSignIntoGroup();
 
-  const handleSubmit = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
-    signIntoGroup(goBack, formData);
+  const handleSubmit = async (e: NativeSyntheticEvent<NativeTouchEvent>) => {
+    const response = await signIntoGroup(formData);
+    if (response) {
+      dispatch(addGroup(response.group));
+      goBack();
+    }
   };
 
   const goBack = props.navigation.goBack;

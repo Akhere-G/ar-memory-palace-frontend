@@ -6,7 +6,7 @@ const Header: any = (props: any) => {
   return (
     <SafeAreaView>
       <View style={styles.Header}>
-        <Text>{title}</Text>
+        <Text style={styles.Title}>{title}</Text>
       </View>
     </SafeAreaView>
   );
@@ -17,7 +17,10 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 30,
     fontSize: 12,
-    backgroundColor: "#cdf",
+    backgroundColor: "#48f",
+  },
+  Title: {
+    color: "#f8f8f8",
   },
 });
 

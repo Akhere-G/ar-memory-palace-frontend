@@ -9,7 +9,7 @@ const Subheader: any = (props: any) => {
   return (
     <View style={styles.Header}>
       {canGoBack() && <IconButton icon="arrow-left" onPress={() => goBack()} />}
-      <Text>{title}</Text>
+      <Text style={styles.Title}>{title}</Text>
     </View>
   );
 };
@@ -20,9 +20,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 0.75,
     height: 50,
-    backgroundColor: "#bce",
+    backgroundColor: "#6af",
     display: "flex",
     flexDirection: "row",
+  },
+  Title: {
+    color: "#f8f8f8",
   },
 });
 

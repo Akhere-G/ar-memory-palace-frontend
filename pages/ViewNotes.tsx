@@ -63,12 +63,6 @@ const ViewNotes = (props: any) => {
           onPress={() => navigation.navigate("CreateNote")}
         />
       </View>
-      <View style={styles.Button}>
-        <Button
-          title="sign into a new note?"
-          onPress={() => navigation.navigate("SignIntoNote")}
-        />
-      </View>
     </View>
   );
 };

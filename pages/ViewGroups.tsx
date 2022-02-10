@@ -2,7 +2,9 @@ import React, { FC, useEffect } from "react";
 import { Text, View, FlatList, Button, StyleSheet } from "react-native";
 import { useGetGroups } from "../hooks";
 import { Group } from "../types";
-
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { setGroups } from "../slices/GroupSlice";
 const Item: FC<Group> = ({ name, category, summary }) => {
   return (
     <View style={styles.GroupItem}>
@@ -14,11 +16,18 @@ const Item: FC<Group> = ({ name, category, summary }) => {
 };
 
 const ViewGroups = (props: any) => {
-  const { groups, loading, error, getGroups } = useGetGroups();
+  const { loading, error, getGroups } = useGetGroups();
   const { navigation } = props;
 
+  const dispatch = useDispatch();
+  const { groups } = useSelector((state: RootState) => state.group);
+
   useEffect(() => {
-    getGroups();
+    const getGroupsFromStorage = async () => {
+      const newGroups = await getGroups();
+      dispatch(setGroups(newGroups));
+    };
+    getGroupsFromStorage();
   }, []);
 
   if (loading) {

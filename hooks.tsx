@@ -163,28 +163,25 @@ export const useCreateGroup = (registerGroup = api.createGroup) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const createGroup = async (goBack: Function, formData: CreateGroupData) => {
+  const createGroup = async (formData: CreateGroupData) => {
     try {
       setLoading(true);
       setError("");
       const possibleError = validateCreateGroupData(formData);
 
       if (possibleError) {
-        setError(possibleError);
-        setLoading(false);
-
-        return;
+        throw new Error(possibleError);
       }
       const response = await registerGroup(formData);
 
       const data = response.data;
 
-      const { token } = data;
+      const { token, group } = data;
 
       setLoading(false);
       storeGroupToken(token);
       setError("");
-      goBack();
+      return { group };
     } catch (err: any) {
       setError(handleError(err));
       setLoading(false);

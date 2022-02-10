@@ -9,6 +9,9 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { addGroup } from "../slices/GroupSlice";
+
 import { useCreateGroup, useGetLocation } from "../hooks";
 import { CreateGroupData } from "../types";
 
@@ -23,12 +26,18 @@ const initialValues: CreateGroupData = {
 
 const ViewGroups = (props: any) => {
   const [formData, setFormData] = useState<CreateGroupData>(initialValues);
+  const dispatch = useDispatch();
+
   const { loading, error, createGroup } = useCreateGroup();
   const goBack = props.navigation.goBack;
 
   const { getLocation, location, loading: locationLoading } = useGetLocation();
-  const handleSubmit = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
-    createGroup(goBack, formData);
+  const handleSubmit = async (e: NativeSyntheticEvent<NativeTouchEvent>) => {
+    const response = await createGroup(formData);
+    if (response) {
+      dispatch(addGroup(response.group));
+      goBack();
+    }
   };
 
   const updateFormData = (newState: Partial<CreateGroupData>) => {

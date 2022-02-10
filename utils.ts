@@ -61,5 +61,5 @@ export const handleError = (
     const message = errorObj?.response?.data?.message || errorObj.message;
     return message || defaultMessage;
   }
-  return defaultMessage;
+  return errorObj.message || defaultMessage;
 };

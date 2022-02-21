@@ -270,8 +270,8 @@ export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
       tokens.forEach(async (token, index) => {
         const response = await fetchNotesForGroup(token);
         const data = response.data;
-        const { notes } = data;
-        setNotes((prev) => [...prev, ...notes]);
+        const newNotes = data.notes;
+        setNotes(newNotes.map((note: any) => ({ ...note, id: note._id })));
         if (index === tokens.length - 1) {
           setSuccess(true);
           setLoading(false);

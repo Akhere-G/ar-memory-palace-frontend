@@ -19,7 +19,7 @@ const initialValues: SignIntoGroupData = {
   password: "",
 };
 
-const ViewGroups = (props: any) => {
+const SignIntoGroups = (props: any) => {
   const [formData, setFormData] = useState<SignIntoGroupData>(initialValues);
   const dispatch = useDispatch();
   const { loading, error, signIntoGroup } = useSignIntoGroup();
@@ -106,4 +106,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewGroups;
+export default SignIntoGroups;

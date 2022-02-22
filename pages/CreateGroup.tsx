@@ -24,7 +24,7 @@ const initialValues: CreateGroupData = {
   confirmPassword: "",
 };
 
-const ViewGroups = (props: any) => {
+const CreateGroup = (props: any) => {
   const [formData, setFormData] = useState<CreateGroupData>(initialValues);
   const dispatch = useDispatch();
 
@@ -142,4 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewGroups;
+export default CreateGroup;

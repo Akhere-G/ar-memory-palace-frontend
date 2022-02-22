@@ -10,7 +10,9 @@ import {
   ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { useDispatch } from "react-redux";
 import { useCreateNote, useGetLocation } from "../hooks";
+import { addNote } from "../slices/NoteSlice";
 import { CreateNoteData } from "../types";
 
 const initialValues: CreateNoteData = {
@@ -21,16 +23,21 @@ const initialValues: CreateNoteData = {
   latitude: "",
 };
 
-const ViewNotes = (props: any) => {
+const CreateNotes = (props: any) => {
   const [formData, setFormData] = useState<CreateNoteData>(initialValues);
+  const dispatch = useDispatch();
   const [height, setHeight] = useState(10);
   const { loading, error, createNote, groupTokensByName } = useCreateNote();
   const goBack = props.navigation.goBack;
 
   const { getLocation, location, loading: locationLoading } = useGetLocation();
 
-  const handleSubmit = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
-    createNote(goBack, formData);
+  const handleSubmit = async (e: NativeSyntheticEvent<NativeTouchEvent>) => {
+    const note = await createNote(formData);
+    if (note) {
+      dispatch(addNote(note));
+      goBack();
+    }
   };
 
   const updateFormData = (newState: Partial<CreateNoteData>) => {
@@ -136,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewNotes;
+export default CreateNotes;

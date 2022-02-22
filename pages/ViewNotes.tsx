@@ -2,23 +2,37 @@ import React, { FC, useEffect } from "react";
 import { Text, View, FlatList, Button, StyleSheet } from "react-native";
 import { useGetNotes } from "../hooks";
 import { Note } from "../types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { setNotes } from "../slices/NoteSlice";
 
-const Item: FC<Note> = ({ title, text }) => {
+const Item: FC<Note> = ({ title, text, groupName }) => {
   return (
     <View style={styles.NoteItem}>
       <Text style={styles.Title}>{title}</Text>
+      <Text style={styles.Subtitle}>{groupName}</Text>
       <Text>{text}</Text>
     </View>
   );
 };
 
 const ViewNotes = (props: any) => {
-  const { notes, loading, error, getNotes } = useGetNotes();
+  const { loading, error, getNotes } = useGetNotes();
   const { navigation } = props;
 
   useEffect(() => {
-    getNotes();
+    const getGroupsFromStorage = async () => {
+      const response = await getNotes();
+      if (response) {
+        const { notes } = response;
+        dispatch(setNotes(notes));
+      }
+    };
+    getGroupsFromStorage();
   }, []);
+
+  const dispatch = useDispatch();
+  const notes = useSelector((state: RootState) => state.note.notes);
 
   if (loading) {
     return (
@@ -71,8 +85,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   Title: {
-    paddingBottom: 10,
+    paddingBottom: 5,
     fontSize: 20,
+  },
+  Subtitle: {
+    paddingBottom: 10,
+    fontSize: 15,
+    color: "#666",
   },
   NoteItem: {
     marginLeft: 10,

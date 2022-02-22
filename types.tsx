@@ -2,6 +2,7 @@ export type Note = {
   id: string;
   title: string;
   groupId: string;
+  groupName: string;
   text: string;
   latitude: Number;
   longitude: Number;

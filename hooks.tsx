@@ -220,7 +220,7 @@ export const useCreateNote = (postNote = api.createNote) => {
     getGroups();
   }, []);
 
-  const createNote = async (goBack: Function, formData: CreateNoteData) => {
+  const createNote = async (formData: CreateNoteData) => {
     try {
       setLoading(true);
       setError("");
@@ -234,13 +234,11 @@ export const useCreateNote = (postNote = api.createNote) => {
       }
       const response = await postNote(formData);
 
-      const data = response.data;
-
-      const { note } = data;
+      const { note } = response.data;
 
       setLoading(false);
       setError("");
-      goBack();
+      return { ...note, id: note._id };
     } catch (err: any) {
       setError(handleError(err));
       setLoading(false);
@@ -251,14 +249,12 @@ export const useCreateNote = (postNote = api.createNote) => {
 };
 
 export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
-  const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(false);
-  const [sucess, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
   const getNotes = async () => {
     setLoading(true);
-    setSuccess(false);
+    let notes: Note[] = [];
     const groupTokens = await getGroupTokens();
 
     try {
@@ -267,22 +263,28 @@ export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
         setLoading(false);
         setError("");
       }
-      tokens.forEach(async (token, index) => {
+      for await (const token of tokens) {
         const response = await fetchNotesForGroup(token);
         const data = response.data;
         const newNotes = data.notes;
-        setNotes(newNotes.map((note: any) => ({ ...note, id: note._id })));
-        if (index === tokens.length - 1) {
-          setSuccess(true);
-          setLoading(false);
-          setError("");
-        }
-      });
+        const group = (await jwt_decode(token)) as Group;
+        const groupName = group.name;
+        const formattedNotes: Note[] = newNotes.map((note: any) => ({
+          ...note,
+          groupName,
+          id: note._id,
+        }));
+        notes = [...notes, ...formattedNotes];
+      }
+
+      setLoading(false);
+      setError("");
+      return { notes, total: notes.length };
     } catch (err) {
       setError(handleError(err));
       setLoading(false);
     }
   };
 
-  return { notes, loading, error, sucess, getNotes };
+  return { loading, error, getNotes };
 };

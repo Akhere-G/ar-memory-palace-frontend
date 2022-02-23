@@ -1,20 +1,10 @@
-import React, { FC, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Text, View, FlatList, Button, StyleSheet } from "react-native";
 import { useGetNotes } from "../hooks";
-import { Note } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { setNotes } from "../slices/NoteSlice";
-
-const Item: FC<Note> = ({ title, text, groupName }) => {
-  return (
-    <View style={styles.NoteItem}>
-      <Text style={styles.Title}>{title}</Text>
-      <Text style={styles.Subtitle}>{groupName}</Text>
-      <Text>{text}</Text>
-    </View>
-  );
-};
+import { SingleNote } from "../components";
 
 const ViewNotes = (props: any) => {
   const { loading, error, getNotes } = useGetNotes();
@@ -68,7 +58,7 @@ const ViewNotes = (props: any) => {
     <View style={styles.Main}>
       <FlatList
         data={notes}
-        renderItem={({ item }) => <Item {...item} />}
+        renderItem={({ item }) => <SingleNote {...item} />}
         keyExtractor={(item) => item.id}
       />
       <View style={styles.Button}>

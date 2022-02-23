@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Header } from "../components/";
 import GroupStack from "./GroupStack";
 import NoteStack from "./NoteStack";
+import ARpage from "./AR";
 import { IconButton } from "react-native-paper";
 
 const Tab = createBottomTabNavigator();
@@ -40,6 +41,20 @@ const Navigator: FC = () => {
               <IconButton
                 color={focused ? "#48f" : color}
                 icon="note"
+                size={size}
+              ></IconButton>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="AR view"
+          component={ARpage}
+          options={{
+            title: "AR view",
+            tabBarIcon: ({ focused, color, size }) => (
+              <IconButton
+                color={focused ? "#48f" : color}
+                icon="camera"
                 size={size}
               ></IconButton>
             ),

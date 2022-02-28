@@ -1,4 +1,9 @@
-import { CreateGroupData, CreateNoteData, SignIntoGroupData } from "./types";
+import {
+  Note,
+  CreateGroupData,
+  CreateNoteData,
+  SignIntoGroupData,
+} from "./types";
 
 const validateString = (name: string, value: string, maxLength = 30) => {
   if (!value.trim()) {
@@ -85,4 +90,15 @@ export const areTheseCoordsClose = (
   const d = R * c; // in metres
 
   return d < minDist;
+};
+
+export const getCloseNotes = (
+  notes: Note[],
+  lat: number,
+  lon: number,
+  minDist: number
+) => {
+  return notes.filter((note) =>
+    areTheseCoordsClose(note.latitude, note.longitude, lat, lon, minDist)
+  );
 };

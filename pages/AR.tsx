@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 import { Camera } from "expo-camera";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { SingleNote } from "../components";
+import { NoteList } from "../components";
 import { useGetLocation, useGetNotes } from "../hooks";
-import { areTheseCoordsClose } from "../utils";
+import { getCloseNotes } from "../utils";
 import { setNotes } from "../slices/NoteSlice";
 
 const MIN_DISTANCE = 10;
 
-const ARpage = () => {
+const ARpage = (props: any) => {
+  const { navigation } = props;
   const [hasPermission, setHasPermission] = useState(false);
   const notes = useSelector((state: RootState) => state.note.notes);
   const {
@@ -56,22 +57,43 @@ const ARpage = () => {
     return <Text>Error. Could not get notes</Text>;
   }
 
-  if (locationLoading || notesLoading) {
+  if (notesLoading) {
     return <Text>Loading...</Text>;
   }
 
-  const lat1 = Number(location?.latitude) || 0;
-  const lon1 = Number(location?.longitude) || 0;
+  if (!notes) {
+    return (
+      <View>
+        <Text style={styles.Text}>No notes available</Text>
+        <Button
+          title="You have no notes... Create a new note?"
+          onPress={() => navigation.navigate("CreateNote")}
+        />
+      </View>
+    );
+  }
 
-  const lon2 = notes[0].longitude;
-  const lat2 = notes[0].latitude;
+  const lat = Number(location?.latitude) || 0;
+  const lon = Number(location?.longitude) || 0;
 
+  const filteredNotes = getCloseNotes(notes, lat, lon, MIN_DISTANCE);
+
+  if (!filteredNotes) {
+    return (
+      <View>
+        <Text style={styles.Text}>
+          You're not close enough to a note to view it! Get within 10m of a note
+          to see it.
+        </Text>
+      </View>
+    );
+  }
   return (
     <View style={styles.Container}>
       <Camera style={styles.Camera} type={Camera.Constants.Type.back}>
-        {areTheseCoordsClose(lat1, lon1, lat2, lon2, MIN_DISTANCE) && (
+        {filteredNotes && (
           <View style={styles.NoteContainer}>
-            <SingleNote {...notes[0]} />
+            <NoteList notes={filteredNotes} />
           </View>
         )}
       </Camera>

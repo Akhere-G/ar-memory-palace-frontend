@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { Text, View, FlatList, Button, StyleSheet } from "react-native";
+import { Text, View, Button, StyleSheet } from "react-native";
 import { useGetNotes } from "../hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { setNotes } from "../slices/NoteSlice";
-import { SingleNote } from "../components";
+import { NoteList } from "../components";
 
 const ViewNotes = (props: any) => {
   const { loading, error, getNotes } = useGetNotes();
@@ -56,11 +56,7 @@ const ViewNotes = (props: any) => {
 
   return (
     <View style={styles.Main}>
-      <FlatList
-        data={notes}
-        renderItem={({ item }) => <SingleNote {...item} />}
-        keyExtractor={(item) => item.id}
-      />
+      <NoteList notes={notes} />
       <View style={styles.Button}>
         <Button
           title="Create a new note?"

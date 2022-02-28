@@ -11,14 +11,14 @@ const ViewNotes = (props: any) => {
   const { navigation } = props;
 
   useEffect(() => {
-    const getGroupsFromStorage = async () => {
+    const fetchNotes = async () => {
       const response = await getNotes();
       if (response) {
         const { notes } = response;
         dispatch(setNotes(notes));
       }
     };
-    getGroupsFromStorage();
+    fetchNotes();
   }, []);
 
   const dispatch = useDispatch();

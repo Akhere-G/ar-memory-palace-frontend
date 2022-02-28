@@ -4,21 +4,43 @@ import { Camera } from "expo-camera";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { SingleNote } from "../components";
-import { useGetLocation } from "../hooks";
+import { useGetLocation, useGetNotes } from "../hooks";
 import { areTheseCoordsClose } from "../utils";
+import { setNotes } from "../slices/NoteSlice";
+
 const MIN_DISTANCE = 10;
 
 const ARpage = () => {
   const [hasPermission, setHasPermission] = useState(false);
   const notes = useSelector((state: RootState) => state.note.notes);
-  const { getLocation, location, loading } = useGetLocation();
+  const {
+    getLocation,
+    location,
+    error: locationError,
+    loading: locationLoading,
+  } = useGetLocation();
+  const { error: notesError, getNotes, loading: notesLoading } = useGetNotes();
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      if (!notes) {
+        const result = await getNotes();
+        if (result) {
+          setNotes(result.notes);
+        }
+      }
+    };
+
+    fetchNotes();
+  }, []);
 
   useEffect(() => {
     setInterval(async () => {
-      if (!loading) {
+      if (!locationLoading && !notesLoading) {
         await getLocation();
       }
     }, 1000);
+
     const requestPermissions = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
@@ -28,6 +50,14 @@ const ARpage = () => {
 
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
+  }
+
+  if (locationError || notesError) {
+    return <Text>Error. Could not get notes</Text>;
+  }
+
+  if (locationLoading || notesLoading) {
+    return <Text>Loading...</Text>;
   }
 
   const lat1 = Number(location?.latitude) || 0;

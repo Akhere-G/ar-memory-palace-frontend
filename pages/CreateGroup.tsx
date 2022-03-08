@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -12,14 +12,12 @@ import {
 import { useDispatch } from "react-redux";
 import { addGroup } from "../slices/GroupSlice";
 
-import { useCreateGroup, useGetLocation } from "../hooks";
+import { useCreateGroup } from "../hooks";
 import { CreateGroupData } from "../types";
 
 const initialValues: CreateGroupData = {
   name: "",
   summary: "",
-  longitude: "",
-  latitude: "",
   password: "",
   confirmPassword: "",
 };
@@ -31,7 +29,6 @@ const CreateGroup = (props: any) => {
   const { loading, error, createGroup } = useCreateGroup();
   const goBack = props.navigation.goBack;
 
-  const { getLocation, location, loading: locationLoading } = useGetLocation();
   const handleSubmit = async (e: NativeSyntheticEvent<NativeTouchEvent>) => {
     const response = await createGroup(formData);
     if (response) {
@@ -43,12 +40,6 @@ const CreateGroup = (props: any) => {
   const updateFormData = (newState: Partial<CreateGroupData>) => {
     setFormData((prev) => ({ ...prev, ...newState }));
   };
-
-  useEffect(() => {
-    if (location) {
-      updateFormData(location);
-    }
-  }, [location]);
 
   return (
     <ScrollView style={styles.Form}>
@@ -88,13 +79,6 @@ const CreateGroup = (props: any) => {
             secureTextEntry={true}
             style={styles.Input}
           />
-        </View>
-        <View style={styles.FormGroup}>
-          <Button
-            title={location ? "location set" : "Use current location?"}
-            disabled={locationLoading}
-            onPress={getLocation}
-          ></Button>
         </View>
         <View style={styles.Button}>
           <Button

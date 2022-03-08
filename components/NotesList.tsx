@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { FlatList } from "react-native";
 import { Note } from "../types";
-import { SingleNote } from ".";
+import SingleNote from "./Note";
 
 const NotesList: FC<{ notes: Note[] }> = ({ notes }) => {
   return (

@@ -17,8 +17,7 @@ const validateString = (name: string, value: string, maxLength = 30) => {
 };
 
 export const validateCreateGroupData = (formData: CreateGroupData) => {
-  const { name, summary, password, confirmPassword, latitude, longitude } =
-    formData;
+  const { name, summary, password, confirmPassword } = formData;
   const nameError = validateString("name", name);
   const summaryError = validateString("summary", summary, 200);
   const passwordError = validateString("password", password);
@@ -27,9 +26,6 @@ export const validateCreateGroupData = (formData: CreateGroupData) => {
     confirmPassword
   );
 
-  if (longitude === "" || latitude === "") {
-    return "Location is required";
-  }
   return nameError || summaryError || passwordError || confirmPasswordError;
 };
 

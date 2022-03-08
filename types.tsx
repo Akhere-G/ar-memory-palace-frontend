@@ -13,15 +13,11 @@ export type Group = {
   name: string;
   category: string;
   summary: string;
-  latitude: number;
-  longitude: number;
 };
 
 export type CreateGroupData = {
   name: string;
   summary: string;
-  latitude: string;
-  longitude: string;
   password: string;
   confirmPassword: string;
 };

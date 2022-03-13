@@ -56,8 +56,11 @@ const ViewNotes = (props: any) => {
 
   return (
     <View style={styles.Main}>
-      <NoteList notes={notes} />
-      <View style={styles.Button}>
+      <View style={styles.ScrollList}>
+        <NoteList notes={notes} />
+      </View>
+
+      <View>
         <Button
           title="Create a new note?"
           onPress={() => navigation.navigate("CreateNote")}
@@ -67,8 +70,13 @@ const ViewNotes = (props: any) => {
   );
 };
 const styles = StyleSheet.create({
+  ScrollList: {
+    paddingBottom: 10,
+    maxHeight: "95%",
+  },
   Main: {
     padding: 10,
+    paddingBottom: 40,
   },
   Title: {
     paddingBottom: 5,
@@ -91,9 +99,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   Button: {
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 10,
+    paddingBottom: 30,
   },
 });
 

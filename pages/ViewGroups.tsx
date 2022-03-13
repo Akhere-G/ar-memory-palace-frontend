@@ -71,11 +71,13 @@ const ViewGroups = (props: any) => {
 
   return (
     <View style={styles.Main}>
-      <FlatList
-        data={groups}
-        renderItem={({ item }) => <Item {...item} />}
-        keyExtractor={(item) => item.id}
-      />
+      <View style={styles.ScrollList}>
+        <FlatList
+          data={groups}
+          renderItem={({ item }) => <Item {...item} />}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
       <View style={styles.Button}>
         <Button
           title="Create a new group?"
@@ -92,8 +94,13 @@ const ViewGroups = (props: any) => {
   );
 };
 const styles = StyleSheet.create({
+  ScrollList: {
+    paddingBottom: 10,
+    maxHeight: "85%",
+  },
   Main: {
     padding: 10,
+    paddingBottom: 40,
   },
   Title: {
     paddingBottom: 10,
@@ -111,9 +118,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   Button: {
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 10,
+    paddingBottom: 0,
   },
 });
 

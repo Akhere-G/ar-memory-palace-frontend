@@ -20,6 +20,7 @@ export default {
       supportsTablet: true,
     },
     android: {
+      package: "com.armemorypalace",
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#FFFFFF",

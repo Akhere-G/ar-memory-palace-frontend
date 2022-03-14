@@ -1,7 +1,10 @@
 import axios from "axios";
+import Constants from "expo-constants";
 import { CreateGroupData, SignIntoGroupData, CreateNoteData } from "./types";
 
-const baseUrl = __DEV__ ? "http://localhost:5000" : "/";
+const SERVER_URL = Constants?.manifest?.extra?.SERVER_URL;
+
+const baseUrl = __DEV__ ? "http://localhost:5000" : SERVER_URL;
 
 export const refreshToken = async (token: string) => {
   return await axios({

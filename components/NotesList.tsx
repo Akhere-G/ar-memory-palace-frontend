@@ -3,12 +3,20 @@ import { FlatList } from "react-native";
 import { Note } from "../types";
 import SingleNote from "./Note";
 
-const NotesList: FC<{ notes: Note[] }> = ({ notes }) => {
+interface INoteList {
+  notes: Note[];
+  editNote: (note: Note) => void;
+  deleteNote: (note: Note) => void;
+}
+
+const NotesList: FC<INoteList> = ({ notes, editNote, deleteNote }) => {
   return (
     <FlatList
       data={notes}
-      renderItem={({ item }) => <SingleNote {...item} />}
-      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <SingleNote note={item} editNote={editNote} deleteNote={deleteNote} />
+      )}
+      keyExtractor={(note) => note.id}
     />
   );
 };

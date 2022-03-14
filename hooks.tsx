@@ -9,13 +9,14 @@ import {
   SignIntoGroupData,
   Coordinates,
   Note,
-  CreateNoteData,
+  NoteData,
 } from "./types";
 import {
   validateCreateGroupData,
   validateSignIntoGroupData,
   handleError,
   validateCreateNoteData,
+  validateUpdateNoteData,
 } from "./utils";
 
 import * as Location from "expo-location";
@@ -246,7 +247,7 @@ export const useCreateNote = (postNote = api.createNote) => {
     getGroups();
   }, []);
 
-  const createNote = async (formData: CreateNoteData) => {
+  const createNote = async (formData: NoteData) => {
     try {
       setLoading(true);
       setError("");
@@ -274,6 +275,38 @@ export const useCreateNote = (postNote = api.createNote) => {
   return { loading, error, createNote, groupTokensByName };
 };
 
+export const useUpdateNote = (updateNoteAPI = api.updateNote) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const updateNote = async (formData: NoteData, id: string) => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const possibleError = validateUpdateNoteData(formData);
+
+      if (possibleError) {
+        setError(possibleError);
+        setLoading(false);
+        return;
+      }
+      const response = await updateNoteAPI(formData, id);
+
+      const { note } = response.data;
+
+      setLoading(false);
+      setError("");
+      return { ...note, id: note._id };
+    } catch (err: any) {
+      setError(handleError(err));
+      setLoading(false);
+    }
+  };
+
+  return { loading, error, updateNote };
+};
+
 export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -298,6 +331,7 @@ export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
         const formattedNotes: Note[] = newNotes.map((note: any) => ({
           ...note,
           groupName,
+          groupToken: token,
           id: note._id,
         }));
         notes = [...notes, ...formattedNotes];

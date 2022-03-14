@@ -9,11 +9,10 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { useDispatch } from "react-redux";
-import { useCreateNote, useGetLocation } from "../hooks";
-import { addNote } from "../slices/NoteSlice";
-import { NoteData } from "../types";
+import { useUpdateNote, useGetLocation } from "../hooks";
+import { updateNote as updateNoteLocally } from "../slices/NoteSlice";
+import { NoteData, Note } from "../types";
 
 const initialValues: NoteData = {
   groupToken: "",
@@ -23,19 +22,19 @@ const initialValues: NoteData = {
   latitude: "",
 };
 
-const CreateNotes = (props: any) => {
+const UpdateNotes = (props: any) => {
   const [formData, setFormData] = useState<NoteData>(initialValues);
   const dispatch = useDispatch();
   const [height, setHeight] = useState(10);
-  const { loading, error, createNote, groupTokensByName } = useCreateNote();
+  const { loading, error, updateNote } = useUpdateNote();
   const goBack = props.navigation.goBack;
-
+  const noteData: Note = props.route.params.note;
   const { getLocation, location, loading: locationLoading } = useGetLocation();
 
   const handleSubmit = async (e: NativeSyntheticEvent<NativeTouchEvent>) => {
-    const note = await createNote(formData);
+    const note = await updateNote(formData, noteData.id);
     if (note) {
-      dispatch(addNote(note));
+      dispatch(updateNoteLocally(note));
       goBack();
     }
   };
@@ -50,23 +49,21 @@ const CreateNotes = (props: any) => {
     }
   }, [location]);
 
+  useEffect(() => {
+    updateFormData({
+      groupToken: noteData.groupToken,
+      latitude: String(noteData.latitude),
+      longitude: String(noteData.longitude),
+      text: noteData.text,
+      title: noteData.title,
+    });
+  }, []);
+
   return (
     <ScrollView style={styles.Form}>
-      <Text style={styles.Title}>Create new note</Text>
+      <Text style={styles.Title}>Update new note</Text>
       {error ? <Text style={styles.Error}>{error}</Text> : <></>}
       <View>
-        <View style={styles.FormGroup}>
-          <Text>Group</Text>
-          <Picker
-            selectedValue={formData.groupToken}
-            onValueChange={(groupToken) => updateFormData({ groupToken })}
-          >
-            {Object.entries(groupTokensByName).map((entry) => {
-              const [name, token] = entry;
-              return <Picker.Item key={name} label={name} value={token} />;
-            })}
-          </Picker>
-        </View>
         <View style={styles.FormGroup}>
           <Text>Title</Text>
           <TextInput
@@ -92,7 +89,9 @@ const CreateNotes = (props: any) => {
         </View>
         <View style={styles.FormGroup}>
           <Button
-            title={location ? "location set" : "Use current location?"}
+            title={
+              location ? "location set" : "Update loction to current location?"
+            }
             disabled={locationLoading}
             onPress={getLocation}
           ></Button>
@@ -100,7 +99,7 @@ const CreateNotes = (props: any) => {
         <View style={styles.Button}>
           <Button
             onPress={handleSubmit}
-            title={loading ? "Loading..." : "Create Note"}
+            title={loading ? "Loading..." : "Update Note"}
             disabled={loading}
           />
         </View>
@@ -143,4 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateNotes;
+export default UpdateNotes;

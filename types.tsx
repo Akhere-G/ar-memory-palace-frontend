@@ -3,6 +3,7 @@ export type Note = {
   title: string;
   groupId: string;
   groupName: string;
+  groupToken: string;
   text: string;
   latitude: number;
   longitude: number;
@@ -32,7 +33,7 @@ export type Coordinates = {
   longitude: string;
 };
 
-export type CreateNoteData = {
+export type NoteData = {
   title: string;
   groupToken: string;
   text: string;

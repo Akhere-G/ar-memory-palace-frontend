@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Subheader } from "../components";
 import ViewNotes from "./ViewNotes";
 import CreateNote from "./CreateNote";
+import UpdateNote from "./UpdateNote";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,11 @@ const Navigator: FC = () => {
         name="CreateNote"
         component={CreateNote}
         options={{ title: "Create Note" }}
+      />
+      <Stack.Screen
+        name="UpdateNote"
+        component={UpdateNote}
+        options={{ title: "Update Note" }}
       />
     </Stack.Navigator>
   );

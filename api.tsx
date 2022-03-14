@@ -1,6 +1,6 @@
 import axios from "axios";
 import Constants from "expo-constants";
-import { CreateGroupData, SignIntoGroupData, CreateNoteData } from "./types";
+import { CreateGroupData, NoteData, SignIntoGroupData } from "./types";
 
 const SERVER_URL = Constants?.manifest?.extra?.SERVER_URL;
 
@@ -42,10 +42,26 @@ export const fetchNotesForGroup = async (token: string) => {
   });
 };
 
-export const createNote = async (data: CreateNoteData) => {
+export const createNote = async (data: NoteData) => {
   return await axios({
     method: "post",
     url: `${baseUrl}/api/notes`,
+    data: {
+      title: data.title,
+      text: data.text,
+      latitude: data.latitude,
+      longitude: data.longitude,
+    },
+    headers: {
+      authorization: `Bearer ${data.groupToken}`,
+    },
+  });
+};
+
+export const updateNote = async (data: NoteData, id: string) => {
+  return await axios({
+    method: "patch",
+    url: `${baseUrl}/api/notes/${id}`,
     data: {
       title: data.title,
       text: data.text,

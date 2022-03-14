@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { setNotes } from "../slices/NoteSlice";
 import { NoteList } from "../components";
+import { Note } from "../types";
 
 const ViewNotes = (props: any) => {
   const { loading, error, getNotes } = useGetNotes();
@@ -54,10 +55,17 @@ const ViewNotes = (props: any) => {
     );
   }
 
+  const editNote = (note: Note) => {
+    navigation.navigate("UpdateNote", {
+      note,
+    });
+  };
+  const deleteNote = (note: Note) => {};
+
   return (
     <View style={styles.Main}>
       <View style={styles.ScrollList}>
-        <NoteList notes={notes} />
+        <NoteList notes={notes} editNote={editNote} deleteNote={deleteNote} />
       </View>
 
       <View>

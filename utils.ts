@@ -1,9 +1,4 @@
-import {
-  Note,
-  CreateGroupData,
-  CreateNoteData,
-  SignIntoGroupData,
-} from "./types";
+import { Note, CreateGroupData, NoteData, SignIntoGroupData } from "./types";
 
 const validateString = (name: string, value: string, maxLength = 30) => {
   if (!value.trim()) {
@@ -36,7 +31,7 @@ export const validateSignIntoGroupData = (formData: SignIntoGroupData) => {
   return nameError || passwordError;
 };
 
-export const validateCreateNoteData = (formData: CreateNoteData) => {
+export const validateCreateNoteData = (formData: NoteData) => {
   const { groupToken, latitude, longitude, text, title } = formData;
   const groupTokenError = validateString(
     "the group of the note",
@@ -49,6 +44,16 @@ export const validateCreateNoteData = (formData: CreateNoteData) => {
     return "Location is required";
   }
   return groupTokenError || titleError || textError;
+};
+
+export const validateUpdateNoteData = (formData: NoteData) => {
+  const { latitude, longitude, text, title } = formData;
+  const titleError = validateString("Title", title, 50);
+  const textError = validateString("Text", text, 600);
+  if (longitude === "" || latitude === "") {
+    return "Location is required";
+  }
+  return titleError || textError;
 };
 
 export const handleError = (

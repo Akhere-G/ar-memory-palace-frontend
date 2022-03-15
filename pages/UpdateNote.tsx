@@ -4,8 +4,6 @@ import {
   View,
   TextInput,
   Button,
-  NativeSyntheticEvent,
-  NativeTouchEvent,
   StyleSheet,
   ScrollView,
 } from "react-native";
@@ -24,14 +22,17 @@ const initialValues: NoteData = {
 
 const UpdateNotes = (props: any) => {
   const [formData, setFormData] = useState<NoteData>(initialValues);
-  const dispatch = useDispatch();
   const [height, setHeight] = useState(10);
-  const { loading, error, updateNote } = useUpdateNote();
+
   const goBack = props.navigation.goBack;
   const noteData: Note = props.route.params.note;
+  const groupToken: string = props.route.params.groupToken;
+  const { loading, error, updateNote } = useUpdateNote();
   const { getLocation, location, loading: locationLoading } = useGetLocation();
 
-  const handleSubmit = async (e: NativeSyntheticEvent<NativeTouchEvent>) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async () => {
     const note = await updateNote(formData, noteData.id);
     if (note) {
       dispatch(updateNoteLocally(note));
@@ -51,7 +52,7 @@ const UpdateNotes = (props: any) => {
 
   useEffect(() => {
     updateFormData({
-      groupToken: noteData.groupToken,
+      groupToken: groupToken,
       latitude: String(noteData.latitude),
       longitude: String(noteData.longitude),
       text: noteData.text,

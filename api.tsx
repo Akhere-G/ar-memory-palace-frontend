@@ -4,7 +4,7 @@ import { CreateGroupData, NoteData, SignIntoGroupData } from "./types";
 
 const SERVER_URL = Constants?.manifest?.extra?.SERVER_URL;
 
-const baseUrl = __DEV__ ? "http://localhost:5000" : SERVER_URL;
+const baseUrl = __DEV__ ? "http://localhost:8000" : SERVER_URL;
 
 export const refreshToken = async (token: string) => {
   return await axios({

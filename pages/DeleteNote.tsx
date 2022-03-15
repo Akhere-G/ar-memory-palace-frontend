@@ -10,9 +10,10 @@ const DeleteNotes = (props: any) => {
   const { loading, error, deleteNote } = useDeleteNote();
   const goBack = props.navigation.goBack;
   const noteData: Note = props.route.params.note;
+  const groupToken: string = props.route.params.groupToken;
 
   const confirmDelete = async () => {
-    const note = await deleteNote(noteData.groupToken, noteData.id);
+    const note = await deleteNote(groupToken, noteData.id);
     if (note) {
       dispatch(deleteNoteLocally(note));
       goBack();

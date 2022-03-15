@@ -24,6 +24,7 @@ const ViewNotes = (props: any) => {
 
   const dispatch = useDispatch();
   const notes = useSelector((state: RootState) => state.note.notes);
+  const groups = useSelector((state: RootState) => state.group.groups);
 
   if (loading) {
     return (
@@ -56,13 +57,18 @@ const ViewNotes = (props: any) => {
   }
 
   const editNote = (note: Note) => {
+    const groupToken =
+      groups.find((group) => group.id === note.groupId)?.token || "";
+
     navigation.navigate("UpdateNote", {
       note,
+      groupToken,
     });
   };
   const deleteNote = (note: Note) => {
     navigation.navigate("DeleteNote", {
       note,
+      groupToken: groups.find((group) => group.id === note.groupId)?.token,
     });
   };
 

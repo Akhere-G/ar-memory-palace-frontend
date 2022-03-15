@@ -2,8 +2,6 @@ export type Note = {
   id: string;
   title: string;
   groupId: string;
-  groupName: string;
-  groupToken: string;
   text: string;
   latitude: number;
   longitude: number;
@@ -14,6 +12,7 @@ export type Group = {
   name: string;
   category: string;
   summary: string;
+  token: string;
 };
 
 export type CreateGroupData = {

@@ -144,7 +144,7 @@ export const useFetchGroups = (
           await storeGroupToken(token);
 
           tokenList[id] = newToken;
-          return group;
+          return { ...group, token };
         })
       );
 
@@ -297,7 +297,7 @@ export const useUpdateNote = (updateNoteAPI = api.updateNote) => {
 
       setLoading(false);
       setError("");
-      return { ...note, id: note._id };
+      return note;
     } catch (err: any) {
       setError(handleError(err));
       setLoading(false);
@@ -351,13 +351,13 @@ export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
         const response = await fetchNotesForGroup(token);
         const data = response.data;
         const newNotes = data.notes;
-        const group = (await jwt_decode(token)) as Group;
-        const groupName = group.name;
         const formattedNotes: Note[] = newNotes.map((note: any) => ({
-          ...note,
-          groupName,
-          groupToken: token,
           id: note._id,
+          groupId: note.groupId,
+          title: note.title,
+          text: note.text,
+          latitude: note.latitude,
+          longitude: note.longitude,
         }));
         notes = [...notes, ...formattedNotes];
       }

@@ -73,3 +73,13 @@ export const updateNote = async (data: NoteData, id: string) => {
     },
   });
 };
+
+export const deleteNote = async (groupToken: string, id: string) => {
+  return await axios({
+    method: "delete",
+    url: `${baseUrl}/api/notes/${id}`,
+    headers: {
+      authorization: `Bearer ${groupToken}`,
+    },
+  });
+};

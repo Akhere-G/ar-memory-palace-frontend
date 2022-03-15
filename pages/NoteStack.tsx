@@ -5,6 +5,7 @@ import { Subheader } from "../components";
 import ViewNotes from "./ViewNotes";
 import CreateNote from "./CreateNote";
 import UpdateNote from "./UpdateNote";
+import DeleteNote from "./DeleteNote";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,11 @@ const Navigator: FC = () => {
         name="UpdateNote"
         component={UpdateNote}
         options={{ title: "Update Note" }}
+      />
+      <Stack.Screen
+        name="DeleteNote"
+        component={DeleteNote}
+        options={{ title: "Delete Note" }}
       />
     </Stack.Navigator>
   );

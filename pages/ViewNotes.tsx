@@ -60,7 +60,11 @@ const ViewNotes = (props: any) => {
       note,
     });
   };
-  const deleteNote = (note: Note) => {};
+  const deleteNote = (note: Note) => {
+    navigation.navigate("DeleteNote", {
+      note,
+    });
+  };
 
   return (
     <View style={styles.Main}>

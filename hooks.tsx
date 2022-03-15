@@ -307,6 +307,31 @@ export const useUpdateNote = (updateNoteAPI = api.updateNote) => {
   return { loading, error, updateNote };
 };
 
+export const useDeleteNote = (deleteNoteAPI = api.deleteNote) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const deleteNote = async (groupToken: string, id: string) => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await deleteNoteAPI(groupToken, id);
+
+      const { note } = response.data;
+
+      setLoading(false);
+      setError("");
+      return { ...note, id: note._id };
+    } catch (err: any) {
+      setError(handleError(err));
+      setLoading(false);
+    }
+  };
+
+  return { loading, error, deleteNote };
+};
+
 export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

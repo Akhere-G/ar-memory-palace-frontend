@@ -4,8 +4,6 @@ import {
   View,
   TextInput,
   Button,
-  NativeSyntheticEvent,
-  NativeTouchEvent,
   StyleSheet,
   ScrollView,
 } from "react-native";
@@ -32,7 +30,7 @@ const CreateNotes = (props: any) => {
 
   const { getLocation, location, loading: locationLoading } = useGetLocation();
 
-  const handleSubmit = async (e: NativeSyntheticEvent<NativeTouchEvent>) => {
+  const handleSubmit = async () => {
     const note = await createNote(formData);
     if (note) {
       dispatch(addNote(note));
@@ -49,6 +47,8 @@ const CreateNotes = (props: any) => {
       updateFormData(location);
     }
   }, [location]);
+
+  console.log("create note page", groupTokensByName, formData);
 
   return (
     <ScrollView style={styles.Form}>

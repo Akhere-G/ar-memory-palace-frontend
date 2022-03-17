@@ -44,37 +44,12 @@ export const useGetLocation = () => {
       latitude: String(coords.latitude),
       longitude: String(coords.longitude),
     });
+
     setError("");
     setLoading(false);
   };
 
   return { location, hasPermissions, error, loading, getLocation };
-};
-
-export const useFetchLocation = () => {
-  const [hasPermissions, setHasPermissions] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const getLocation = async () => {
-    setLoading(true);
-    if (!hasPermissions) {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status != "granted") {
-        setError("Permission to access location was denied");
-        setLoading(false);
-        return;
-      } else {
-        setHasPermissions(true);
-      }
-    }
-    const location = await Location.getCurrentPositionAsync({});
-    setError("");
-    setLoading(false);
-    return location;
-  };
-
-  return { hasPermissions, error, loading, getLocation };
 };
 
 interface TokenList {

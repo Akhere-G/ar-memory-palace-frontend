@@ -7,6 +7,7 @@ import { NoteList } from "../components";
 import { useGetLocation, useGetNotes } from "../hooks";
 import { getCloseNotes } from "../utils";
 import { setNotes } from "../slices/NoteSlice";
+import { Note } from "../types";
 
 const MIN_DISTANCE = 10;
 
@@ -49,6 +50,8 @@ const ARpage = (props: any) => {
     requestPermissions();
   }, []);
 
+  const groups = useSelector((state: RootState) => state.group.groups);
+
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
@@ -88,12 +91,33 @@ const ARpage = (props: any) => {
       </View>
     );
   }
+
+  const editNote = (note: Note) => {
+    const groupToken =
+      groups.find((group) => group.id === note.groupId)?.token || "";
+
+    navigation.navigate("UpdateNote", {
+      note,
+      groupToken,
+    });
+  };
+  const deleteNote = (note: Note) => {
+    navigation.navigate("DeleteNote", {
+      note,
+      groupToken: groups.find((group) => group.id === note.groupId)?.token,
+    });
+  };
+
   return (
     <View style={styles.Container}>
       <Camera style={styles.Camera} type={Camera.Constants.Type.back}>
         {filteredNotes && (
           <View style={styles.NoteContainer}>
-            <NoteList notes={filteredNotes} />
+            <NoteList
+              notes={filteredNotes}
+              editNote={editNote}
+              deleteNote={deleteNote}
+            />
           </View>
         )}
       </Camera>

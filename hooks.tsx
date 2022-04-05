@@ -326,15 +326,7 @@ export const useGetNotes = (fetchNotesForGroup = api.fetchNotesForGroup) => {
         const response = await fetchNotesForGroup(token);
         const data = response.data;
         const newNotes = data.notes;
-        const formattedNotes: Note[] = newNotes.map((note: any) => ({
-          id: note._id,
-          groupId: note.groupId,
-          title: note.title,
-          text: note.text,
-          latitude: note.latitude,
-          longitude: note.longitude,
-        }));
-        notes = [...notes, ...formattedNotes];
+        notes = [...notes, ...newNotes];
       }
 
       setLoading(false);

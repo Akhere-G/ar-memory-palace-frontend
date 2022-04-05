@@ -1,5 +1,12 @@
 import React, { FC, useEffect } from "react";
-import { Text, View, FlatList, Button, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  ScrollView,
+  FlatList,
+  Button,
+  StyleSheet,
+} from "react-native";
 import { useFetchGroups } from "../hooks";
 import { Group } from "../types";
 import { useDispatch, useSelector } from "react-redux";
@@ -70,7 +77,7 @@ const ViewGroups = (props: any) => {
   }
 
   return (
-    <View style={styles.Main}>
+    <ScrollView style={styles.Main}>
       <View style={styles.ScrollList}>
         <FlatList
           data={groups}
@@ -90,7 +97,7 @@ const ViewGroups = (props: any) => {
           onPress={() => navigation.navigate("SignIntoGroup")}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({

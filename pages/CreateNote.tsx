@@ -48,8 +48,6 @@ const CreateNotes = (props: any) => {
     }
   }, [location]);
 
-  console.log("create note page", groupTokensByName, formData);
-
   return (
     <ScrollView style={styles.Form}>
       <Text style={styles.Title}>Create new note</Text>

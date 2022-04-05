@@ -1,4 +1,11 @@
-import { Note, CreateGroupData, NoteData, SignIntoGroupData } from "./types";
+import {
+  Note,
+  Group,
+  CreateGroupData,
+  NoteData,
+  SignIntoGroupData,
+  NotesByGroup,
+} from "./types";
 
 const validateString = (name: string, value: string, maxLength = 30) => {
   if (!value.trim()) {
@@ -102,4 +109,28 @@ export const getCloseNotes = (
   return notes.filter((note) =>
     areTheseCoordsClose(note.latitude, note.longitude, lat, lon, minDist)
   );
+};
+
+const sortNotesByGroup = (notes: Note[], groups: Group[]) => {
+  const initial: NotesByGroup = {};
+  return notes.reduce((acc, note) => {
+    const groupId = note.groupId;
+    if (groupId) {
+      if (acc[groupId]) {
+        acc[groupId].push(note);
+      } else {
+        acc[groupId] = [note];
+      }
+    }
+    return acc;
+  }, initial);
+};
+
+export const sectionNotesByGroup = (notes: Note[], groups: Group[]) => {
+  const notesByGroupId = sortNotesByGroup(notes, groups);
+  return Object.entries(notesByGroupId).map((entry) => {
+    const [groupId, notes] = entry;
+    const groupName = groups.find((group) => group.id === groupId)?.name || "";
+    return { title: groupName, data: notes };
+  });
 };

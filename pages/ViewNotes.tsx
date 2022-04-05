@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Text, View, Button, StyleSheet } from "react-native";
+import { Text, View, Button, StyleSheet, ScrollView } from "react-native";
 import { useGetNotes } from "../hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -73,9 +73,14 @@ const ViewNotes = (props: any) => {
   };
 
   return (
-    <View style={styles.Main}>
+    <ScrollView style={styles.Main}>
       <View style={styles.ScrollList}>
-        <NoteList notes={notes} editNote={editNote} deleteNote={deleteNote} />
+        <NoteList
+          notes={notes}
+          groups={groups}
+          editNote={editNote}
+          deleteNote={deleteNote}
+        />
       </View>
 
       <View>
@@ -84,7 +89,7 @@ const ViewNotes = (props: any) => {
           onPress={() => navigation.navigate("CreateNote")}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({

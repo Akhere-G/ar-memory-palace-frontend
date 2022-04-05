@@ -115,6 +115,7 @@ const ARpage = (props: any) => {
           <View style={styles.NoteContainer}>
             <NoteList
               notes={filteredNotes}
+              groups={groups}
               editNote={editNote}
               deleteNote={deleteNote}
             />

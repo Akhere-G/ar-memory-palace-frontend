@@ -39,3 +39,7 @@ export type NoteData = {
   latitude: string;
   longitude: string;
 };
+
+export interface NotesByGroup {
+  [key: string]: Note[];
+}

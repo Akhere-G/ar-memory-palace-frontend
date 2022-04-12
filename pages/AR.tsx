@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Button } from "react-native";
 import { Camera } from "expo-camera";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { NoteList } from "../components";
+import { NoGroups, NoteList } from "../components";
 import { useGetLocation, useGetNotes } from "../hooks";
 import { getCloseNotes } from "../utils";
 import { setNotes } from "../slices/NoteSlice";
@@ -25,7 +25,7 @@ const ARpage = (props: any) => {
 
   useEffect(() => {
     const fetchNotes = async () => {
-      if (!notes) {
+      if (!notes.length) {
         const result = await getNotes();
         if (result) {
           setNotes(result.notes);
@@ -52,25 +52,36 @@ const ARpage = (props: any) => {
 
   const groups = useSelector((state: RootState) => state.group.groups);
 
+  (window as any).notes = notes;
+  (window as any).groups = groups;
+
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text style={styles.Title}>No access to camera</Text>;
   }
 
   if (locationError || notesError) {
-    return <Text>Error. Could not get notes</Text>;
+    return <Text style={styles.Title}>Error. Could not get notes</Text>;
   }
 
   if (notesLoading) {
-    return <Text>Loading...</Text>;
+    return <Text style={styles.Title}>Loading...</Text>;
   }
 
-  if (!notes) {
+  if (!groups.length) {
     return (
-      <View>
-        <Text style={styles.Text}>No notes available</Text>
+      <View style={styles.Container}>
+        <NoGroups navigate={navigation.navigate} />
+      </View>
+    );
+  }
+
+  if (!notes.length) {
+    return (
+      <View style={styles.Container}>
+        <Text style={styles.Title}>No notes available</Text>
         <Button
           title="You have no notes... Create a new note?"
-          onPress={() => navigation.navigate("CreateNote")}
+          onPress={() => navigation.navigate("Notes", { screen: "CreateNote" })}
         />
       </View>
     );
@@ -129,6 +140,14 @@ const ARpage = (props: any) => {
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
+    width: "100%",
+    height: "100%",
+    padding: 10,
+    paddingBottom: 40,
+  },
+  Title: {
+    paddingBottom: 10,
+    fontSize: 20,
   },
   Camera: {
     flex: 1,

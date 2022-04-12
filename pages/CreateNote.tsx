@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { useCreateNote, useGetLocation } from "../hooks";
 import { addNote } from "../slices/NoteSlice";
 import { NoteData } from "../types";
+import { NoGroups } from "../components";
 
 const initialValues: NoteData = {
   groupToken: "",
@@ -27,6 +28,7 @@ const CreateNotes = (props: any) => {
   const [height, setHeight] = useState(10);
   const { loading, error, createNote, groupTokensByName } = useCreateNote();
   const goBack = props.navigation.goBack;
+  const navigate = props.navigation.navigate;
 
   const { getLocation, location, loading: locationLoading } = useGetLocation();
 
@@ -48,6 +50,11 @@ const CreateNotes = (props: any) => {
     }
   }, [location]);
 
+  const groupTokensList = Object.entries(groupTokensByName);
+  if (!groupTokensList.length) {
+    return <NoGroups navigate={navigate} onNotePage />;
+  }
+
   return (
     <ScrollView style={styles.Form}>
       <Text style={styles.Title}>Create new note</Text>
@@ -59,7 +66,7 @@ const CreateNotes = (props: any) => {
             selectedValue={formData.groupToken}
             onValueChange={(groupToken) => updateFormData({ groupToken })}
           >
-            {Object.entries(groupTokensByName).map((entry) => {
+            {groupTokensList.map((entry) => {
               const [name, token] = entry;
               return <Picker.Item key={name} label={name} value={token} />;
             })}

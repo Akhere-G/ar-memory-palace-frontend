@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -6,9 +6,9 @@ import {
   Button,
   NativeSyntheticEvent,
   NativeTouchEvent,
-  StyleSheet,
   ScrollView,
 } from "react-native";
+import styles from "../styles";
 import { useDispatch } from "react-redux";
 import { useSignIntoGroup } from "../hooks";
 import { addGroup } from "../slices/GroupSlice";
@@ -60,7 +60,7 @@ const SignIntoGroups = (props: any) => {
             style={styles.Input}
           />
         </View>
-        <View style={styles.Button}>
+        <View style={styles.FormGroup}>
           <Button
             onPress={handleSubmit}
             title={loading ? "Loading..." : "Sign into Group"}
@@ -71,39 +71,5 @@ const SignIntoGroups = (props: any) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  Title: {
-    fontSize: 17,
-    paddingBottom: 10,
-  },
-  Error: {
-    backgroundColor: "#fdd",
-    color: "#600",
-    padding: 3,
-  },
-  Success: {
-    backgroundColor: "#dfd",
-    color: "#060",
-    padding: 3,
-  },
-  Form: {
-    padding: 10,
-  },
-  FormGroup: {
-    paddingBottom: 10,
-  },
-  Input: {
-    borderColor: "#aaa",
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderRadius: 5,
-    borderStyle: "solid",
-    padding: 2.5,
-  },
-  Button: {
-    paddingTop: 10,
-  },
-});
 
 export default SignIntoGroups;

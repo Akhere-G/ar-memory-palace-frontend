@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { Text, View, Button, StyleSheet, ScrollView } from "react-native";
 import { useGetNotes } from "../hooks";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,20 +12,22 @@ const ViewNotes = (props: any) => {
   const { loading, error, getNotes } = useGetNotes();
   const { navigation } = props;
 
-  useEffect(() => {
-    const fetchNotes = async () => {
-      const response = await getNotes();
-      if (response) {
-        const { notes } = response;
-        dispatch(setNotes(notes));
-      }
-    };
-    fetchNotes();
-  }, []);
-
   const dispatch = useDispatch();
   const notes = useSelector((state: RootState) => state.note.notes);
   const groups = useSelector((state: RootState) => state.group.groups);
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchNotes = async () => {
+        const response = await getNotes();
+        if (response) {
+          const { notes } = response;
+          dispatch(setNotes(notes));
+        }
+      };
+      fetchNotes();
+    }, [groups])
+  );
 
   if (loading) {
     return (

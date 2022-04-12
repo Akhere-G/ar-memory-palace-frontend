@@ -1,12 +1,6 @@
-import React, { FC, useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  Button,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, View, TextInput, Button, ScrollView } from "react-native";
+import styles from "../styles";
 import { Picker } from "@react-native-picker/picker";
 import { useDispatch } from "react-redux";
 import { useCreateNote, useGetLocation } from "../hooks";
@@ -102,7 +96,7 @@ const CreateNotes = (props: any) => {
             onPress={getLocation}
           ></Button>
         </View>
-        <View style={styles.Button}>
+        <View style={styles.FormGroup}>
           <Button
             onPress={handleSubmit}
             title={loading ? "Loading..." : "Create Note"}
@@ -113,39 +107,5 @@ const CreateNotes = (props: any) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  Title: {
-    fontSize: 17,
-    paddingBottom: 10,
-  },
-  Error: {
-    backgroundColor: "#fdd",
-    color: "#600",
-    padding: 3,
-  },
-  Success: {
-    backgroundColor: "#dfd",
-    color: "#060",
-    padding: 3,
-  },
-  Form: {
-    padding: 10,
-  },
-  FormGroup: {
-    paddingBottom: 10,
-  },
-  Input: {
-    borderColor: "#aaa",
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderRadius: 5,
-    borderStyle: "solid",
-    padding: 2.5,
-  },
-  Button: {
-    paddingTop: 10,
-  },
-});
 
 export default CreateNotes;

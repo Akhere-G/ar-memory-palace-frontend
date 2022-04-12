@@ -26,6 +26,11 @@ export default StyleSheet.create({
   Main: {
     padding: 10,
     paddingBottom: 40,
+    marginHorizontal: 0,
+  },
+  CenteredMain: {
+    padding: 30,
+    marginHorizontal: "auto",
   },
   Title: {
     paddingBottom: 10,
@@ -93,6 +98,7 @@ export default StyleSheet.create({
   ButtonGroup: {
     flexDirection: "row",
     justifyContent: "space-between",
+    maxWidth: 200,
   },
   CameraContainer: {
     flex: 1,
@@ -110,5 +116,8 @@ export default StyleSheet.create({
   Text: {
     backgroundColor: "white",
     padding: 5,
+  },
+  PadRight: {
+    paddingRight: 10,
   },
 });

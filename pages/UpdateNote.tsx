@@ -1,16 +1,11 @@
 import React, { FC, useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  Button,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { Text, View, TextInput, Button, ScrollView } from "react-native";
 import { useDispatch } from "react-redux";
 import { useUpdateNote, useGetLocation } from "../hooks";
 import { updateNote as updateNoteLocally } from "../slices/NoteSlice";
 import { NoteData, Note } from "../types";
+
+import styles from "../styles";
 
 const initialValues: NoteData = {
   groupToken: "",
@@ -108,39 +103,4 @@ const UpdateNotes = (props: any) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  Title: {
-    fontSize: 17,
-    paddingBottom: 10,
-  },
-  Error: {
-    backgroundColor: "#fdd",
-    color: "#600",
-    padding: 3,
-  },
-  Success: {
-    backgroundColor: "#dfd",
-    color: "#060",
-    padding: 3,
-  },
-  Form: {
-    padding: 10,
-  },
-  FormGroup: {
-    paddingBottom: 10,
-  },
-  Input: {
-    borderColor: "#aaa",
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderRadius: 5,
-    borderStyle: "solid",
-    padding: 2.5,
-  },
-  Button: {
-    paddingTop: 10,
-  },
-});
-
 export default UpdateNotes;

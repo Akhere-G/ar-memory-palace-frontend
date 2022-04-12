@@ -7,6 +7,7 @@ import { RootState } from "../store";
 import { setNotes } from "../slices/NoteSlice";
 import { NoteList } from "../components";
 import { Note } from "../types";
+import styles from "../styles";
 
 const ViewNotes = (props: any) => {
   const { loading, error, getNotes } = useGetNotes();
@@ -95,39 +96,5 @@ const ViewNotes = (props: any) => {
     </ScrollView>
   );
 };
-const styles = StyleSheet.create({
-  ScrollList: {
-    paddingBottom: 10,
-    maxHeight: "95%",
-  },
-  Main: {
-    padding: 10,
-    paddingBottom: 40,
-  },
-  Title: {
-    paddingBottom: 5,
-    fontSize: 20,
-  },
-  Subtitle: {
-    paddingBottom: 10,
-    fontSize: 15,
-    color: "#666",
-  },
-  NoteItem: {
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 10,
-    borderColor: "#aaa",
-    borderStyle: "solid",
-    borderBottomWidth: 1,
-    borderRightWidth: 1,
-    backgroundColor: "white",
-    padding: 10,
-  },
-  Button: {
-    padding: 10,
-    paddingBottom: 30,
-  },
-});
 
 export default ViewNotes;

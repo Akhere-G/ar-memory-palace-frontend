@@ -70,4 +70,45 @@ export default StyleSheet.create({
     borderStyle: "solid",
     padding: 2.5,
   },
+  Subtitle: {
+    paddingBottom: 10,
+    fontSize: 15,
+    color: "#666",
+  },
+  NoteItem: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    borderColor: "#aaa",
+    borderStyle: "solid",
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    backgroundColor: "white",
+    padding: 10,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  ButtonGroup: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  CameraContainer: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    paddingBottom: 40,
+  },
+  Camera: {
+    flex: 1,
+  },
+  NoteContainer: {
+    paddingTop: "50%",
+    paddingHorizontal: 10,
+  },
+  Text: {
+    backgroundColor: "white",
+    padding: 5,
+  },
 });

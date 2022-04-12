@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { View, Text, Button } from "react-native";
 import { Camera } from "expo-camera";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { NoGroups, NoteList } from "../components";
 import { useGetLocation, useGetNotes } from "../hooks";
 import { getCloseNotes } from "../utils";
 import { setNotes } from "../slices/NoteSlice";
 import { Note } from "../types";
+import styles from "../styles";
 
 const MIN_DISTANCE = 10;
 
@@ -15,6 +17,8 @@ const ARpage = (props: any) => {
   const { navigation } = props;
   const [hasPermission, setHasPermission] = useState(false);
   const notes = useSelector((state: RootState) => state.note.notes);
+  const groups = useSelector((state: RootState) => state.group.groups);
+  const dispatch = useDispatch();
   const {
     getLocation,
     location,
@@ -23,18 +27,18 @@ const ARpage = (props: any) => {
   } = useGetLocation();
   const { error: notesError, getNotes, loading: notesLoading } = useGetNotes();
 
-  useEffect(() => {
-    const fetchNotes = async () => {
-      if (!notes.length) {
-        const result = await getNotes();
-        if (result) {
-          setNotes(result.notes);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchNotes = async () => {
+        const response = await getNotes();
+        if (response) {
+          const { notes } = response;
+          dispatch(setNotes(notes));
         }
-      }
-    };
-
-    fetchNotes();
-  }, []);
+      };
+      fetchNotes();
+    }, [groups])
+  );
 
   useEffect(() => {
     setInterval(async () => {
@@ -49,8 +53,6 @@ const ARpage = (props: any) => {
     };
     requestPermissions();
   }, []);
-
-  const groups = useSelector((state: RootState) => state.group.groups);
 
   (window as any).notes = notes;
   (window as any).groups = groups;
@@ -69,7 +71,7 @@ const ARpage = (props: any) => {
 
   if (!groups.length) {
     return (
-      <View style={styles.Container}>
+      <View style={styles.Main}>
         <NoGroups navigate={navigation.navigate} />
       </View>
     );
@@ -77,7 +79,7 @@ const ARpage = (props: any) => {
 
   if (!notes.length) {
     return (
-      <View style={styles.Container}>
+      <View style={styles.Main}>
         <Text style={styles.Title}>No notes available</Text>
         <Button
           title="You have no notes... Create a new note?"
@@ -120,7 +122,7 @@ const ARpage = (props: any) => {
   };
 
   return (
-    <View style={styles.Container}>
+    <View style={styles.CameraContainer}>
       <Camera style={styles.Camera} type={Camera.Constants.Type.back}>
         {filteredNotes && (
           <View style={styles.NoteContainer}>
@@ -136,30 +138,5 @@ const ARpage = (props: any) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  Container: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    padding: 10,
-    paddingBottom: 40,
-  },
-  Title: {
-    paddingBottom: 10,
-    fontSize: 20,
-  },
-  Camera: {
-    flex: 1,
-  },
-  NoteContainer: {
-    paddingTop: "50%",
-    paddingHorizontal: 10,
-  },
-  Text: {
-    backgroundColor: "white",
-    padding: 5,
-  },
-});
 
 export default ARpage;
